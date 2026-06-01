@@ -276,7 +276,7 @@ main {
 }
 
 .hero-section {
-    padding: 30px;
+    padding: 24px;
 }
 
 .hero-section h2 {
@@ -360,6 +360,8 @@ button.btn-primary:active {
     min-height: 0;
     position: relative;
     overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: 16px;
 }
 
 .chart-card .chart-wrap canvas {
@@ -370,13 +372,17 @@ button.btn-primary:active {
 
 .table-card {
     padding: 24px;
+    height: 450px;
     display: flex;
     flex-direction: column;
 }
 
 .table-card .table-scroll {
-    overflow-x: auto;
     flex: 1;
+    min-height: 0;
+    overflow: auto;
+    border: 1px solid var(--border);
+    border-radius: 16px;
 }
 
 table {

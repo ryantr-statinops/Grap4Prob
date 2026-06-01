@@ -12,16 +12,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initial State
     ui.updateHeader(currentType);
 
-    // Nav Switcher
+    // Module Switcher — Dropdown
     const switchMode = (type) => {
         currentType = type;
         engine = new SimulationEngine(type);
         ui.updateHeader(type);
-        
-        // Update Nav UI
-        document.querySelectorAll('.nav-item').forEach(item => {
-            item.classList.toggle('active', item.dataset.type === type);
-        });
 
         // Clear results if any
         document.getElementById('aiSection').style.display = 'none';
@@ -36,14 +31,9 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('table-body').innerHTML = '';
     };
 
-    ui.elements.navDice.addEventListener('click', () => switchMode(SIM_TYPES.DICE));
-    ui.elements.navCoin.addEventListener('click', () => switchMode(SIM_TYPES.COIN));
-    ui.elements.navCard.addEventListener('click', () => switchMode(SIM_TYPES.CARD));
-    document.getElementById('nav-urn').addEventListener('click', () => switchMode(SIM_TYPES.URN));
-    document.getElementById('nav-monty').addEventListener('click', () => switchMode(SIM_TYPES.MONTY));
-    document.getElementById('nav-birthday').addEventListener('click', () => switchMode(SIM_TYPES.BIRTHDAY));
-    document.getElementById('nav-buffon').addEventListener('click', () => switchMode(SIM_TYPES.BUFFON));
-    document.getElementById('nav-galton').addEventListener('click', () => switchMode(SIM_TYPES.GALTON));
+    document.getElementById('moduleSelect').addEventListener('change', (e) => {
+        switchMode(e.target.value);
+    });
 
     // Run Simulation
     ui.elements.runBtn.addEventListener('click', async () => {

@@ -20,3 +20,4 @@
 - [ ] Normal Distribution simulation
 - [ ] Export results to CSV/JSON
 - [ ] Dark/Light mode toggle
+

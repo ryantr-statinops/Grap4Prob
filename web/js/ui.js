@@ -16,9 +16,6 @@ export class UIController {
             tableBody: document.getElementById('table-body'),
             aiSection: document.getElementById('aiSection'),
             aiContent: document.getElementById('aiContent'),
-            navDice: document.getElementById('nav-dice'),
-            navCoin: document.getElementById('nav-coin'),
-            navCard: document.getElementById('nav-card'),
             specialVis: document.getElementById('special-vis'),
             canvas: document.getElementById('visCanvas')
         };
@@ -355,7 +352,7 @@ export class UIController {
             this.elements.statusIcon.classList.add('rolling');
         } else {
             this.elements.runBtn.disabled = false;
-            this.elements.runBtn.textContent = 'Bắt đầu mô phỏng';
+            this.elements.runBtn.textContent = '▶ Bắt đầu mô phỏng';
             this.elements.statusIcon.classList.remove('rolling');
         }
     }

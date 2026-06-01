@@ -370,7 +370,13 @@ button.btn-primary:active {
 
 .table-card {
     padding: 24px;
+    display: flex;
+    flex-direction: column;
+}
+
+.table-card .table-scroll {
     overflow-x: auto;
+    flex: 1;
 }
 
 table {

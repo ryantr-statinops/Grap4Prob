@@ -71,7 +71,7 @@
                 </div>
             </section>
 
-            <div class="stats-grid">
+            <div class="stats-grid" id="chartCard" style="display: none;">
                 <section class="chart-card glass">
                     <h3 class="card-title">Phân phối tần suất hiện tại</h3>
                     <div class="chart-wrap">
@@ -81,20 +81,22 @@
 
                 <section class="table-card glass">
                     <h3 class="card-title">Kết quả chi tiết</h3>
-                    <table id="resultTable">
-                        <thead>
-                            <tr id="table-head">
+                    <div class="table-scroll">
+                        <table id="resultTable">
+                            <thead>
+                                <tr id="table-head">
+                                    <!-- Dynamic -->
+                                </tr>
+                            </thead>
+                            <tbody id="table-body">
                                 <!-- Dynamic -->
-                            </tr>
-                        </thead>
-                        <tbody id="table-body">
-                            <!-- Dynamic -->
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </div>
                 </section>
             </div>
 
-            <section class="chart-card chart-card--short glass">
+            <section id="convergenceCard" class="chart-card chart-card--short glass" style="display: none;">
                 <h3 class="card-title">Đường hội tụ lũy tiến (Cumulative Average)</h3>
                 <div class="chart-wrap">
                     <canvas id="convergenceChart"></canvas>

@@ -18,8 +18,10 @@ document.addEventListener('DOMContentLoaded', () => {
         engine = new SimulationEngine(type);
         ui.updateHeader(type);
 
-        // Clear results if any
+        // Clear & hide results
         document.getElementById('aiSection').style.display = 'none';
+        document.getElementById('chartCard').style.display = 'none';
+        document.getElementById('convergenceCard').style.display = 'none';
         if (ui.chart) {
             ui.chart.destroy();
             ui.chart = null;
@@ -81,6 +83,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             const data = engine.run(n);
+            
+            // Show results sections
+            document.getElementById('chartCard').style.display = '';
+            document.getElementById('convergenceCard').style.display = '';
+            
             ui.renderTable(data.results);
             ui.renderChart(data.results);
             ui.renderConvergenceChart(data.history, data.theoreticalProb);

@@ -77,39 +77,39 @@ export class UIController {
         const container = document.getElementById('dynamic-inputs');
         if (type === 'urn') {
             container.innerHTML = `
-                <div style="display: flex; flex-direction: column; gap: 5px;">
-                    <label style="font-size: 0.8rem; color: #ef4444;">🔴 Đỏ</label>
-                    <input type="number" id="urnRed" value="3" min="0" max="100" style="width: 70px;">
+                <div class="dyn-group">
+                    <label class="dyn-label" style="color: #ef4444;">🔴 Đỏ</label>
+                    <input type="number" class="dyn-input" id="urnRed" value="3" min="0" max="100">
                 </div>
-                <div style="display: flex; flex-direction: column; gap: 5px;">
-                    <label style="font-size: 0.8rem; color: #3b82f6;">🔵 Xanh</label>
-                    <input type="number" id="urnBlue" value="5" min="0" max="100" style="width: 70px;">
+                <div class="dyn-group">
+                    <label class="dyn-label" style="color: #3b82f6;">🔵 Xanh</label>
+                    <input type="number" class="dyn-input" id="urnBlue" value="5" min="0" max="100">
                 </div>
-                <div style="display: flex; flex-direction: column; gap: 5px;">
-                    <label style="font-size: 0.8rem; color: #22c55e;">🟢 Lục</label>
-                    <input type="number" id="urnGreen" value="2" min="0" max="100" style="width: 70px;">
+                <div class="dyn-group">
+                    <label class="dyn-label" style="color: #22c55e;">🟢 Lục</label>
+                    <input type="number" class="dyn-input" id="urnGreen" value="2" min="0" max="100">
                 </div>
-                <div style="display: flex; flex-direction: column; gap: 5px;">
-                    <label style="font-size: 0.8rem; color: #eab308;">🟡 Vàng</label>
-                    <input type="number" id="urnYellow" value="0" min="0" max="100" style="width: 70px;">
+                <div class="dyn-group">
+                    <label class="dyn-label" style="color: #eab308;">🟡 Vàng</label>
+                    <input type="number" class="dyn-input" id="urnYellow" value="0" min="0" max="100">
                 </div>
-                <div style="display: flex; flex-direction: column; gap: 5px;">
-                    <label style="font-size: 0.8rem; color: #a855f7;">🟣 Tím</label>
-                    <input type="number" id="urnPurple" value="0" min="0" max="100" style="width: 70px;">
+                <div class="dyn-group">
+                    <label class="dyn-label" style="color: #a855f7;">🟣 Tím</label>
+                    <input type="number" class="dyn-input" id="urnPurple" value="0" min="0" max="100">
                 </div>
             `;
         } else if (type === 'birthday') {
             container.innerHTML = `
-                <div style="display: flex; flex-direction: column; gap: 5px;">
-                    <label style="font-size: 0.8rem; color: var(--text-muted);">Số người trong nhóm (k)</label>
-                    <input type="number" id="bdayGroup" value="23" min="2" max="100" style="width: 120px;">
+                <div class="dyn-group">
+                    <label class="dyn-label" style="color: var(--text-muted);">Số người trong nhóm (k)</label>
+                    <input type="number" class="dyn-input" id="bdayGroup" value="23" min="2" max="100" style="width: 120px;">
                 </div>
             `;
         } else if (type === 'galton') {
             container.innerHTML = `
-                <div style="display: flex; flex-direction: column; gap: 5px;">
-                    <label style="font-size: 0.8rem; color: var(--text-muted);">Số hàng đinh (Rows)</label>
-                    <input type="number" id="galtonRows" value="10" min="5" max="30" style="width: 100px;">
+                <div class="dyn-group">
+                    <label class="dyn-label" style="color: var(--text-muted);">Số hàng đinh (Rows)</label>
+                    <input type="number" class="dyn-input" id="galtonRows" value="10" min="5" max="30" style="width: 100px;">
                 </div>
             `;
         } else {

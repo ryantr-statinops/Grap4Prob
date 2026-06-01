@@ -176,31 +176,10 @@ body {
 /* ===== Top Bar ===== */
 .top-bar {
     padding: 16px 24px;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-}
-
-.top-row {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-}
-
-.logo h1 {
-    font-size: 1.4rem;
-    font-weight: 700;
-    background: linear-gradient(to right, var(--primary), var(--secondary));
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    white-space: nowrap;
 }
 
 .module-selector-wrapper {
-    flex: 1;
-    display: flex;
-    justify-content: center;
+    flex-shrink: 0;
 }
 
 .module-select {
@@ -217,6 +196,7 @@ body {
     outline: none;
     transition: border-color 0.2s, box-shadow 0.2s;
     min-width: 280px;
+    height: 48px;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 14px center;
@@ -238,10 +218,6 @@ body {
     padding: 8px;
 }
 
-.version-badge {
-    white-space: nowrap;
-}
-
 .bottom-row {
     display: flex;
     align-items: center;
@@ -251,8 +227,13 @@ body {
 
 .input-group {
     display: flex;
-    flex-direction: column;
-    gap: 5px;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+
+.input-group .input-label {
+    white-space: nowrap;
 }
 
 .input-group input[type="number"] {
@@ -264,6 +245,27 @@ body {
     gap: 12px;
     align-items: center;
     flex-wrap: wrap;
+}
+
+.dynamic-inputs .dyn-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.dynamic-inputs .dyn-label {
+    font-size: 0.8rem;
+    line-height: 1.4;
+    font-weight: 400;
+}
+
+.dynamic-inputs input[type="number"],
+.dynamic-inputs .dyn-input {
+    width: 80px;
+    height: 48px;
+    padding: 12px;
+    border-radius: 14px;
+    font-size: 1rem;
 }
 
 /* Main Content */
@@ -295,11 +297,12 @@ main {
 input[type="number"] {
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 12px;
+    border-radius: 14px;
     padding: 12px;
     color: var(--text-main);
     font-size: 1rem;
     width: 160px;
+    height: 48px;
     outline: none;
     transition: border-color 0.2s, box-shadow 0.2s;
 }
@@ -316,7 +319,8 @@ button.btn-primary {
     padding: 12px 24px;
     border-radius: 14px;
     font-weight: 700;
-    font-size: var(--text-sm);
+    font-size: 1rem;
+    height: 48px;
     cursor: pointer;
     transition: transform 0.15s, box-shadow 0.2s, background 0.2s;
     box-shadow: 0 8px 22px rgba(37, 99, 235, 0.18);
@@ -514,22 +518,13 @@ table code {
     .app-container {
         padding: 12px;
     }
-    .top-row {
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 10px;
-    }
-    .module-selector-wrapper {
-        order: 3;
-        flex: 0 0 100%;
+    .bottom-row {
+        flex-direction: column;
+        align-items: stretch;
     }
     .module-select {
         min-width: unset;
         width: 100%;
-    }
-    .bottom-row {
-        flex-direction: column;
-        align-items: stretch;
     }
     .input-group input[type="number"] {
         width: 100%;

@@ -64,14 +64,19 @@
                 <p id="main-description">Luật số lớn phát biểu rằng khi số lần thử nghiệm tăng lên, tần suất thực nghiệm sẽ tiến dần đến xác suất lý thuyết.</p>
             </section>
             
-            <section id="special-vis" class="glass" style="display: none; height: 300px; margin-bottom: 20px; overflow: hidden; position: relative;">
-                <canvas id="visCanvas" style="width: 100%; height: 100%;"></canvas>
+            <section id="special-vis" class="glass vis-section" style="display: none;">
+                <h3 class="card-title">🪡 Mô phỏng Kim Buffon</h3>
+                <div class="vis-canvas-wrap">
+                    <canvas id="visCanvas"></canvas>
+                </div>
             </section>
 
             <div class="stats-grid">
                 <section class="chart-card glass">
-                    <h3 class="card-title" style="margin-bottom: 15px;">Phân phối tần suất hiện tại</h3>
-                    <canvas id="mainChart"></canvas>
+                    <h3 class="card-title">Phân phối tần suất hiện tại</h3>
+                    <div class="chart-wrap">
+                        <canvas id="mainChart"></canvas>
+                    </div>
                 </section>
 
                 <section class="table-card glass">
@@ -88,9 +93,11 @@
                 </section>
             </div>
 
-            <section class="chart-card glass" style="height: 350px;">
-                <h3 class="card-title" style="margin-bottom: 15px;">Đường hội tụ lũy tiến (Cumulative Average)</h3>
-                <canvas id="convergenceChart"></canvas>
+            <section class="chart-card chart-card--short glass">
+                <h3 class="card-title">Đường hội tụ lũy tiến (Cumulative Average)</h3>
+                <div class="chart-wrap">
+                    <canvas id="convergenceChart"></canvas>
+                </div>
             </section>
 
 

@@ -57,7 +57,7 @@ export class UIController {
             this.elements.desc.textContent = 'Mô phỏng việc thả một cây kim lên mặt phẳng có các đường kẻ song song để ước lượng giá trị của số π.';
             this.elements.statusIcon.textContent = '🪡';
             this.renderDynamicInputs(type);
-            this.elements.specialVis.style.display = 'block';
+            this.elements.specialVis.style.display = 'flex';
             return;
         } else if (type === 'galton') {
             this.elements.title.textContent = 'Bàn Galton (Định lý Giới hạn Trung tâm)';
@@ -311,10 +311,10 @@ export class UIController {
 
         ctx.clearRect(0, 0, width, height);
         
-        // Draw Lines
+        // Draw Lines (vertical grid lines)
         const spacing = 60;
-        ctx.strokeStyle = 'rgba(255,255,255,0.1)';
-        ctx.lineWidth = 2;
+        ctx.strokeStyle = 'rgba(15, 23, 42, 0.12)';
+        ctx.lineWidth = 1.5;
         for (let x = 0; x < width; x += spacing) {
             ctx.beginPath();
             ctx.moveTo(x, 0);
@@ -339,8 +339,8 @@ export class UIController {
             ctx.beginPath();
             ctx.moveTo(x, y);
             ctx.lineTo(x2, y2);
-            ctx.strokeStyle = hit ? '#ff007a' : 'rgba(0, 210, 255, 0.4)';
-            ctx.lineWidth = 1;
+            ctx.strokeStyle = hit ? '#ff007a' : 'rgba(0, 210, 255, 0.5)';
+            ctx.lineWidth = 1.5;
             ctx.stroke();
         }
     }

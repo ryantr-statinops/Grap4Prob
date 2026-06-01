@@ -136,7 +136,7 @@ export class UIController {
                 <tr>
                     <td><span class="badge" style="background: ${res.color || 'rgba(0,210,255,0.2)'}">${res.label}</span></td>
                     <td><code style="color: #94a3b8;">${res.count.toLocaleString()}</code></td>
-                    <td style="font-weight: 600; color: #f8fafc;">${res.empiricalProb.toFixed(3)}%</td>
+                    <td style="font-weight: 600; color: #0F172A;">${res.empiricalProb.toFixed(3)}%</td>
                     <td style="color: #94a3b8;">${res.theoreticalProb.toFixed(3)}%</td>
                     <td style="color: ${errorColor}; font-family: monospace;">
                         ${res.error > 0 ? '+' : ''}${res.error.toFixed(4)}%
@@ -203,7 +203,7 @@ export class UIController {
                 },
                 plugins: {
                     legend: {
-                        labels: { color: '#f8fafc', font: { family: 'Outfit' } }
+                        labels: { color: '#475569', font: { family: 'Outfit' } }
                     }
                 }
             }
@@ -262,7 +262,7 @@ export class UIController {
                 },
                 plugins: {
                     legend: {
-                        labels: { color: '#f8fafc', font: { family: 'Outfit' } }
+                        labels: { color: '#475569', font: { family: 'Outfit' } }
                     }
                 }
             }

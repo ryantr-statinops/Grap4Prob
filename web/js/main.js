@@ -81,6 +81,11 @@ document.addEventListener('DOMContentLoaded', () => {
             engine = new SimulationEngine(currentType, customConfig);
         }
 
+        let theoreticalProb = engine.config.theoreticalProb;
+        if (currentType === SIM_TYPES.URN && customConfig) {
+            const total = customConfig.red + customConfig.blue + customConfig.green + customConfig.yellow + customConfig.purple;
+            theoreticalProb = total > 0 ? (customConfig.red / total) * 100 : 0;
+        }
 
         ui.setLoading(true);
 
@@ -94,18 +99,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 const intermediateResults = engine.computeResults(counts, current);
                 ui.renderChart(intermediateResults);
                 ui.renderTable(intermediateResults);
-                ui.renderConvergenceChart(history, engine.config.theoreticalProb);
+                ui.renderConvergenceChart(history, theoreticalProb);
             });
             
             // Final render với dữ liệu đầy đủ
             ui.renderTable(data.results);
             ui.renderChart(data.results);
-            ui.renderConvergenceChart(data.history, data.theoreticalProb);
+            ui.renderConvergenceChart(data.history, theoreticalProb);
             ui.showAIInsights(n, data.results);
-
-            if (currentType === SIM_TYPES.BUFFON) {
-                ui.renderBuffonVis(n);
-            }
         } catch (error) {
             console.error('Simulation failed:', error);
             alert('Có lỗi xảy ra trong quá trình mô phỏng.');

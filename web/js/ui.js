@@ -15,9 +15,7 @@ export class UIController {
             tableHead: document.getElementById('table-head'),
             tableBody: document.getElementById('table-body'),
             aiSection: document.getElementById('aiSection'),
-            aiContent: document.getElementById('aiContent'),
-            specialVis: document.getElementById('special-vis'),
-            canvas: document.getElementById('visCanvas')
+            aiContent: document.getElementById('aiContent')
         };
     }
 
@@ -26,7 +24,6 @@ export class UIController {
         this.elements.desc.textContent = 'Chọn một kiểu mô phỏng từ menu bên dưới để bắt đầu khám phá.';
         this.elements.statusIcon.textContent = '🎯';
         document.getElementById('dynamic-inputs').innerHTML = '';
-        this.elements.specialVis.style.display = 'none';
     }
 
     updateHeader(type) {
@@ -43,7 +40,7 @@ export class UIController {
             this.elements.desc.textContent = 'Xác suất lý thuyết để rút được một chất (Cơ, Rô, Chuồn, Bích) là 1/4 (25%).';
             this.elements.statusIcon.textContent = '🃏';
         } else if (type === 'urn') {
-            this.elements.title.textContent = 'Mô phỏng Rút bi (Urn Problem)';
+            this.elements.title.textContent = 'Mô phỏng Rút bi có hoàn trả (Urn Problem)';
             this.elements.desc.textContent = 'Xác suất rút được một viên bi phụ thuộc vào số lượng bi của màu đó chia cho tổng số bi trong túi.';
             this.elements.statusIcon.textContent = '🎱';
             this.renderDynamicInputs(type);
@@ -65,20 +62,17 @@ export class UIController {
             this.elements.desc.textContent = 'Mô phỏng việc thả một cây kim lên mặt phẳng có các đường kẻ song song để ước lượng giá trị của số π.';
             this.elements.statusIcon.textContent = '🪡';
             this.renderDynamicInputs(type);
-            this.elements.specialVis.style.display = 'flex';
             return;
         } else if (type === 'galton') {
             this.elements.title.textContent = 'Bàn Galton (Định lý Giới hạn Trung tâm)';
             this.elements.desc.textContent = 'Các viên bi rơi qua các hàng đinh ngẫu nhiên sẽ hội tụ về Phân phối Chuẩn (Bell Curve).';
             this.elements.statusIcon.textContent = '🛝';
             this.renderDynamicInputs(type);
-            this.elements.specialVis.style.display = 'none';
             return;
         }
 
         // Clear dynamic inputs for simple simulations
         document.getElementById('dynamic-inputs').innerHTML = '';
-        this.elements.specialVis.style.display = 'none';
     }
 
     renderDynamicInputs(type) {
@@ -133,13 +127,11 @@ export class UIController {
             <th>Thực nghiệm</th>
             <th>Lý thuyết</th>
             <th>Sai số</th>
-            <th style="width: 150px;">Phân phối trực quan</th>
         `;
 
         this.elements.tableBody.innerHTML = results.map(res => {
-            const barWidth = Math.min(100, res.empiricalProb);
             const errorColor = res.error < 0.1 ? '#22c55e' : (res.error < 1 ? '#eab308' : '#ef4444');
-            
+
             return `
                 <tr>
                     <td><span class="badge" style="background: ${res.color || 'rgba(0,210,255,0.2)'}">${res.label}</span></td>
@@ -148,11 +140,6 @@ export class UIController {
                     <td style="color: #94a3b8;">${res.theoreticalProb.toFixed(3)}%</td>
                     <td style="color: ${errorColor}; font-family: monospace;">
                         ${res.error > 0 ? '+' : ''}${res.error.toFixed(4)}%
-                    </td>
-                    <td>
-                        <div class="table-progress-bg">
-                            <div class="table-progress-bar" style="width: ${barWidth}%; background: ${res.color || '#00d2ff'};"></div>
-                        </div>
                     </td>
                 </tr>
             `;
@@ -318,50 +305,6 @@ export class UIController {
         }
 
         this.elements.aiContent.innerHTML = insight;
-    }
-
-    renderBuffonVis(n) {
-        const canvas = this.elements.canvas;
-        const ctx = canvas.getContext('2d');
-        const width = canvas.offsetWidth;
-        const height = canvas.offsetHeight;
-        canvas.width = width;
-        canvas.height = height;
-
-        ctx.clearRect(0, 0, width, height);
-        
-        // Draw Lines (vertical grid lines)
-        const spacing = 60;
-        ctx.strokeStyle = 'rgba(15, 23, 42, 0.12)';
-        ctx.lineWidth = 1.5;
-        for (let x = 0; x < width; x += spacing) {
-            ctx.beginPath();
-            ctx.moveTo(x, 0);
-            ctx.lineTo(x, height);
-            ctx.stroke();
-        }
-
-        // Draw Needles (only show 200 for performance and clarity)
-        const displayLimit = Math.min(n, 200);
-        for (let i = 0; i < displayLimit; i++) {
-            const x = Math.random() * width;
-            const y = Math.random() * height;
-            const angle = Math.random() * Math.PI;
-            const length = spacing; // L = D
-
-            const x2 = x + Math.cos(angle) * length;
-            const y2 = y + Math.sin(angle) * length;
-
-            // Check if touches a line
-            const hit = Math.floor(x / spacing) !== Math.floor(x2 / spacing);
-
-            ctx.beginPath();
-            ctx.moveTo(x, y);
-            ctx.lineTo(x2, y2);
-            ctx.strokeStyle = hit ? '#ff007a' : 'rgba(0, 210, 255, 0.5)';
-            ctx.lineWidth = 1.5;
-            ctx.stroke();
-        }
     }
 
     setLoading(isLoading) {

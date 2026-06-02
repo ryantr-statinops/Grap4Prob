@@ -432,28 +432,6 @@ td {
     border-bottom: 1px solid rgba(226, 232, 240, 1);
 }
 
-.vis-section {
-    padding: 24px;
-    height: 340px;
-    display: none;
-    flex-direction: column;
-}
-
-.vis-section .vis-canvas-wrap {
-    flex: 1;
-    min-height: 0;
-    border-radius: 16px;
-    overflow: hidden;
-    background: var(--surface-2);
-    position: relative;
-}
-
-.vis-section #visCanvas {
-    width: 100%;
-    height: 100%;
-    display: block;
-}
-
 .ai-panel {
     padding: 24px;
     border-left: 6px solid var(--accent);
@@ -574,20 +552,6 @@ td {
     white-space: nowrap;
 }
 
-.table-progress-bg {
-    width: 100%;
-    height: 8px;
-    background: rgba(226, 232, 240, 1);
-    border-radius: 999px;
-    overflow: hidden;
-}
-
-.table-progress-bar {
-    height: 100%;
-    border-radius: 999px;
-    transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
 table code {
     font-size: 0.85rem;
     background: rgba(15, 23, 42, 0.06);
@@ -649,11 +613,6 @@ table code {
         min-height: 350px;
     }
     .chart-card--short {
-        height: auto;
-        min-height: 280px;
-    }
-    .vis-section {
-        padding: 16px;
         height: auto;
         min-height: 280px;
     }

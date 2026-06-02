@@ -166,7 +166,12 @@ export class UIController {
         const theoreticalData = results.map(r => r.theoreticalProb);
 
         if (this.chart) {
-            this.chart.destroy();
+            // Incremental update — animate bars growing
+            this.chart.data.labels = labels;
+            this.chart.data.datasets[0].data = empiricalData;
+            this.chart.data.datasets[1].data = theoreticalData;
+            this.chart.update('none');
+            return;
         }
 
         this.chart = new Chart(ctx, {
@@ -222,7 +227,14 @@ export class UIController {
         const ctx = document.getElementById('convergenceChart').getContext('2d');
 
         if (this.convergenceChart) {
-            this.convergenceChart.destroy();
+            // Incremental update — draw more points as simulation progresses
+            this.convergenceChart.data.datasets[0].data = history;
+            this.convergenceChart.data.datasets[1].data = [
+                { x: 0, y: theoreticalProb },
+                { x: history.length > 0 ? history[history.length - 1].x : 0, y: theoreticalProb }
+            ];
+            this.convergenceChart.update('none');
+            return;
         }
 
         this.convergenceChart = new Chart(ctx, {
@@ -276,7 +288,6 @@ export class UIController {
             }
         });
     }
-
 
     showAIInsights(n, results) {
         this.elements.aiSection.style.display = 'block';

@@ -84,16 +84,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
         ui.setLoading(true);
 
-        // Artificial delay for "wow" effect and animation
-        await new Promise(resolve => setTimeout(resolve, 800));
+        // Hiện chart cards ngay lập tức
+        document.getElementById('chartCard').style.display = '';
+        document.getElementById('convergenceCard').style.display = '';
 
         try {
-            const data = engine.run(n);
+            const data = await engine.runProgressive(n, (current, total, counts, history) => {
+                // Tính kết quả trung gian và cập nhật chart + table dần
+                const intermediateResults = engine.computeResults(counts, current);
+                ui.renderChart(intermediateResults);
+                ui.renderTable(intermediateResults);
+                ui.renderConvergenceChart(history, engine.config.theoreticalProb);
+            });
             
-            // Show results sections
-            document.getElementById('chartCard').style.display = '';
-            document.getElementById('convergenceCard').style.display = '';
-            
+            // Final render với dữ liệu đầy đủ
             ui.renderTable(data.results);
             ui.renderChart(data.results);
             ui.renderConvergenceChart(data.history, data.theoreticalProb);

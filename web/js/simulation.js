@@ -125,117 +125,46 @@ export class SimulationEngine {
         }
     }
 
-    run(n) {
-        const counts = new Array(this.config.faces.length).fill(0);
-        const history = [];
-        const sampleInterval = Math.max(1, Math.floor(n / 100));
-
-        // Dùng cho Urn
+    getIndividualTheoreticalProb(index) {
         const bag = this.config.bag;
-
-        // Pre-allocate arrays for BIRTHDAY simulation to avoid GC pauses
-        let birthdaysArray = null;
-        let touchedDays = null;
-        if (this.type === SIM_TYPES.BIRTHDAY) {
-            birthdaysArray = new Uint8Array(365);
-            touchedDays = new Int32Array(this.config.groupSize);
+        let tProb = this.config.theoreticalProb;
+        if (this.type === SIM_TYPES.URN) {
+            const colorsCount = [
+                bag.filter(x => x === 0).length,
+                bag.filter(x => x === 1).length,
+                bag.filter(x => x === 2).length,
+                bag.filter(x => x === 3).length,
+                bag.filter(x => x === 4).length
+            ];
+            tProb = (colorsCount[index] / bag.length) * 100;
+        } else if (this.type === SIM_TYPES.MONTY) {
+            tProb = index === 0 ? 66.6667 : 33.3333;
+        } else if (this.type === SIM_TYPES.BIRTHDAY) {
+            tProb = index === 0 ? this.config.theoreticalProb : (100 - this.config.theoreticalProb);
+        } else if (this.type === SIM_TYPES.BUFFON) {
+            tProb = index === 0 ? (2 / Math.PI) * 100 : (1 - 2 / Math.PI) * 100;
+        } else if (this.type === SIM_TYPES.GALTON) {
+            const r = this.config.rows;
+            const k = index;
+            const combinations = (n_val, k_val) => {
+                if (k_val < 0 || k_val > n_val) return 0;
+                if (k_val === 0 || k_val === n_val) return 1;
+                if (k_val > n_val / 2) k_val = n_val - k_val;
+                let res = 1;
+                for (let i = 1; i <= k_val; i++) {
+                    res = res * (n_val - i + 1) / i;
+                }
+                return res;
+            };
+            tProb = combinations(r, k) * Math.pow(0.5, r) * 100;
         }
+        return tProb;
+    }
 
-        for (let i = 1; i <= n; i++) {
-            let roll;
-            if (this.type === SIM_TYPES.URN) {
-                const idx = Math.floor(Math.random() * bag.length);
-                roll = bag[idx];
-            } else if (this.type === SIM_TYPES.MONTY) {
-                // 3 doors: 0, 1, 2
-                const prizeDoor = Math.floor(Math.random() * 3);
-                const pickDoor = Math.floor(Math.random() * 3);
-                if (prizeDoor === pickDoor) {
-                    roll = 1; // Stay wins
-                } else {
-                    roll = 0; // Switch wins
-                }
-            } else if (this.type === SIM_TYPES.BIRTHDAY) {
-                const groupSize = this.config.groupSize;
-                let hasMatch = false;
-                let touchedCount = 0;
-                
-                for (let j = 0; j < groupSize; j++) {
-                    const bday = Math.floor(Math.random() * 365);
-                    if (birthdaysArray[bday] === 1) {
-                        hasMatch = true;
-                        break;
-                    }
-                    birthdaysArray[bday] = 1;
-                    touchedDays[touchedCount++] = bday;
-                }
-                roll = hasMatch ? 0 : 1;
-                
-                // Fast cleanup
-                for (let j = 0; j < touchedCount; j++) {
-                    birthdaysArray[touchedDays[j]] = 0;
-                }
-            } else if (this.type === SIM_TYPES.BUFFON) {
-                const angle = Math.random() * Math.PI / 2;
-                const centerPos = Math.random() * 0.5; // Giả sử D = 1
-                const hit = centerPos <= (0.5 * Math.sin(angle)); // Giả sử L = 1
-                roll = hit ? 0 : 1;
-            } else if (this.type === SIM_TYPES.GALTON) {
-                let position = 0;
-                for (let j = 0; j < this.config.rows; j++) {
-                    if (Math.random() > 0.5) position++;
-                }
-                roll = position;
-            } else {
-                roll = Math.floor(Math.random() * this.config.faces.length);
-            }
-            
-            counts[roll]++;
-
-            if (i % sampleInterval === 0 || i === n) {
-                const currentProb = (counts[0] / i) * 100;
-                history.push({ x: i, y: currentProb });
-            }
-        }
-
-
+    computeResults(counts, n) {
         const results = counts.map((count, index) => {
             const empiricalProb = (count / n) * 100;
-            // Xác suất lý thuyết tuỳ thuộc vào loại
-            let tProb = this.config.theoreticalProb;
-            if (this.type === SIM_TYPES.URN) {
-                const colorsCount = [
-                    bag.filter(x => x === 0).length,
-                    bag.filter(x => x === 1).length,
-                    bag.filter(x => x === 2).length,
-                    bag.filter(x => x === 3).length,
-                    bag.filter(x => x === 4).length
-                ];
-                tProb = (colorsCount[index] / bag.length) * 100;
-            } else if (this.type === SIM_TYPES.MONTY) {
-                tProb = index === 0 ? 66.6667 : 33.3333; // 0: Switch, 1: Stay
-            } else if (this.type === SIM_TYPES.BIRTHDAY) {
-                tProb = index === 0 ? this.config.theoreticalProb : (100 - this.config.theoreticalProb);
-            } else if (this.type === SIM_TYPES.BUFFON) {
-                tProb = index === 0 ? (2 / Math.PI) * 100 : (1 - 2 / Math.PI) * 100;
-            } else if (this.type === SIM_TYPES.GALTON) {
-                // Phân phối nhị thức: P(k) = C(n, k) * p^k * (1-p)^(n-k)
-                const r = this.config.rows;
-                const k = index;
-                const combinations = (n_val, k_val) => {
-                    if (k_val < 0 || k_val > n_val) return 0;
-                    if (k_val === 0 || k_val === n_val) return 1;
-                    if (k_val > n_val / 2) k_val = n_val - k_val;
-                    let res = 1;
-                    for (let i = 1; i <= k_val; i++) {
-                        res = res * (n_val - i + 1) / i;
-                    }
-                    return res;
-                };
-                tProb = combinations(r, k) * Math.pow(0.5, r) * 100;
-            }
-
-
+            const tProb = this.getIndividualTheoreticalProb(index);
             const error = Math.abs(empiricalProb - tProb);
             return {
                 label: this.config.labels[index],
@@ -246,12 +175,93 @@ export class SimulationEngine {
                 color: this.config.colors ? this.config.colors[index] : null
             };
         }).filter(res => {
-            // Đối với Rút bi, ẩn những màu có số lượng = 0 để tránh rối
             if (this.type === SIM_TYPES.URN) {
                 return res.theoreticalProb > 0;
             }
             return true;
         });
+        return results;
+    }
+
+    async runProgressive(n, onProgress) {
+        const counts = new Array(this.config.faces.length).fill(0);
+        const history = [];
+        const sampleInterval = Math.max(1, Math.floor(n / 100));
+
+        const bag = this.config.bag;
+
+        let birthdaysArray = null;
+        let touchedDays = null;
+        if (this.type === SIM_TYPES.BIRTHDAY) {
+            birthdaysArray = new Uint8Array(365);
+            touchedDays = new Int32Array(this.config.groupSize);
+        }
+
+        const NUM_UPDATES = Math.min(n, 50);
+        const stepSize = Math.max(1, Math.floor(n / NUM_UPDATES));
+        const delayMs = Math.max(10, Math.floor(5000 / Math.ceil(n / stepSize)));
+
+        for (let i = 1; i <= n; i++) {
+            let roll;
+            if (this.type === SIM_TYPES.URN) {
+                const idx = Math.floor(Math.random() * bag.length);
+                roll = bag[idx];
+            } else if (this.type === SIM_TYPES.MONTY) {
+                const prizeDoor = Math.floor(Math.random() * 3);
+                const pickDoor = Math.floor(Math.random() * 3);
+                if (prizeDoor === pickDoor) {
+                    roll = 1;
+                } else {
+                    roll = 0;
+                }
+            } else if (this.type === SIM_TYPES.BIRTHDAY) {
+                const groupSize = this.config.groupSize;
+                let hasMatch = false;
+                let touchedCount = 0;
+
+                for (let j = 0; j < groupSize; j++) {
+                    const bday = Math.floor(Math.random() * 365);
+                    if (birthdaysArray[bday] === 1) {
+                        hasMatch = true;
+                        break;
+                    }
+                    birthdaysArray[bday] = 1;
+                    touchedDays[touchedCount++] = bday;
+                }
+                roll = hasMatch ? 0 : 1;
+
+                for (let j = 0; j < touchedCount; j++) {
+                    birthdaysArray[touchedDays[j]] = 0;
+                }
+            } else if (this.type === SIM_TYPES.BUFFON) {
+                const angle = Math.random() * Math.PI / 2;
+                const centerPos = Math.random() * 0.5;
+                const hit = centerPos <= (0.5 * Math.sin(angle));
+                roll = hit ? 0 : 1;
+            } else if (this.type === SIM_TYPES.GALTON) {
+                let position = 0;
+                for (let j = 0; j < this.config.rows; j++) {
+                    if (Math.random() > 0.5) position++;
+                }
+                roll = position;
+            } else {
+                roll = Math.floor(Math.random() * this.config.faces.length);
+            }
+
+            counts[roll]++;
+
+            if (i % sampleInterval === 0 || i === n) {
+                const currentProb = (counts[0] / i) * 100;
+                history.push({ x: i, y: currentProb });
+            }
+
+            if (i % stepSize === 0 || i === n) {
+                onProgress(i, n, [...counts], [...history]);
+                await new Promise(resolve => setTimeout(resolve, delayMs));
+            }
+        }
+
+        const results = this.computeResults(counts, n);
 
         return {
             n,

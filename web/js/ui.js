@@ -99,6 +99,13 @@ export class UIController {
                     <label class="dyn-label" style="color: #a855f7;">🟣 Tím</label>
                     <input type="number" class="dyn-input" id="urnPurple" value="0" min="0" max="100">
                 </div>
+                <div class="dyn-group">
+                    <label class="dyn-label" style="color: var(--text-muted);">Chế độ rút</label>
+                    <select class="dyn-input" id="urnMode" style="width: 250px; height: 48px; padding: 12px; border-radius: 14px; background: var(--surface); border: 1px solid var(--border); outline: none; cursor: pointer; font-size: 1rem; color: var(--text-main);">
+                        <option value="with" selected>Có hoàn trả (With Replacement)</option>
+                        <option value="without">Không hoàn trả (Without Replacement)</option>
+                    </select>
+                </div>
             `;
         } else if (type === 'birthday') {
             container.innerHTML = `
@@ -315,11 +322,13 @@ export class UIController {
         const maxError = Math.max(...results.map(r => r.error));
 
         if (n < 500) {
-            insight += `<p>Kết quả có độ <strong>dao động cao</strong>. Sai số lớn nhất lên tới ${maxError.toFixed(2)}%. Điều này là bình thường vì kích thước mẫu chưa đủ lớn để triệt tiêu các biến số ngẫu nhiên.</p>`;
-        } else if (n < 5000) {
-            insight += `<p>Dữ liệu bắt đầu <strong>hội tụ</strong>. Các cột tần suất đã tiến sát đường lý thuyết. Sai số trung bình đang giảm dần theo quy luật căn bậc hai của n.</p>`;
+            insight += `<p>Với số lần thử hiện tại, sai số còn khá lớn do kích thước mẫu chưa đủ lớn.</p>`;
         } else {
-            insight += `<p>Minh họa <strong>hoàn hảo</strong> cho Luật số lớn. Với n rất lớn, các biến cố ngẫu nhiên tự triệt tiêu lẫn nhau, khiến tần suất thực tế gần như trùng khớp với xác suất lý thuyết (sai số cực nhỏ: ${maxError.toFixed(4)}%).</p>`;
+            insight += `<p>Kết quả thực nghiệm đã tiến rất gần xác suất lý thuyết. Đây là minh họa rõ ràng cho Luật số lớn.</p>`;
+        }
+
+        if (maxError < 1) {
+            insight += `<p style="margin-top: 10px; color: #22c55e; font-weight: 600;">Hệ thống đã hội tụ rất tốt.</p>`;
         }
 
         if (results[0].label.includes('Kim chạm vạch')) {

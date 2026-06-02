@@ -69,7 +69,8 @@ export class SimulationEngine {
                 labels: ['Bi Đỏ 🔴', 'Bi Xanh Dương 🔵', 'Bi Xanh Lá 🟢', 'Bi Vàng 🟡', 'Bi Tím 🟣'],
                 icon: '🎱',
                 isTrackingFirstOnly: false,
-                colors: ['#ef4444', '#3b82f6', '#22c55e', '#eab308', '#a855f7']
+                colors: ['#ef4444', '#3b82f6', '#22c55e', '#eab308', '#a855f7'],
+                mode: customConfig?.mode || 'with'
             };
         } else if (type === SIM_TYPES.MONTY) {
             return {
@@ -189,6 +190,10 @@ export class SimulationEngine {
         const sampleInterval = Math.max(1, Math.floor(n / 100));
 
         const bag = this.config.bag;
+        let currentBag = null;
+        if (this.type === SIM_TYPES.URN && this.config.mode === 'without') {
+            currentBag = [...bag];
+        }
 
         let birthdaysArray = null;
         let touchedDays = null;
@@ -204,8 +209,18 @@ export class SimulationEngine {
         for (let i = 1; i <= n; i++) {
             let roll;
             if (this.type === SIM_TYPES.URN) {
-                const idx = Math.floor(Math.random() * bag.length);
-                roll = bag[idx];
+                if (this.config.mode === 'without') {
+                    if (currentBag.length === 0) {
+                        n = i - 1;
+                        break;
+                    }
+                    const idx = Math.floor(Math.random() * currentBag.length);
+                    roll = currentBag[idx];
+                    currentBag.splice(idx, 1);
+                } else {
+                    const idx = Math.floor(Math.random() * bag.length);
+                    roll = bag[idx];
+                }
             } else if (this.type === SIM_TYPES.MONTY) {
                 const prizeDoor = Math.floor(Math.random() * 3);
                 const pickDoor = Math.floor(Math.random() * 3);

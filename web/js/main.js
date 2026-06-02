@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('Vui lòng chọn kiểu mô phỏng trước!');
             return;
         }
-        const n = parseInt(ui.elements.nInput.value);
+        let n = parseInt(ui.elements.nInput.value);
         if (isNaN(n) || n <= 0) {
             alert('Vui lòng nhập số lần thử!');
             return;
@@ -80,11 +80,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 blue: parseInt(document.getElementById('urnBlue').value) || 0,
                 green: parseInt(document.getElementById('urnGreen').value) || 0,
                 yellow: parseInt(document.getElementById('urnYellow').value) || 0,
-                purple: parseInt(document.getElementById('urnPurple').value) || 0
+                purple: parseInt(document.getElementById('urnPurple').value) || 0,
+                mode: document.getElementById('urnMode').value
             };
-            if (customConfig.red + customConfig.blue + customConfig.green + customConfig.yellow + customConfig.purple === 0) {
+            const totalBalls = customConfig.red + customConfig.blue + customConfig.green + customConfig.yellow + customConfig.purple;
+            if (totalBalls === 0) {
                 alert('Túi bi không được để trống!');
                 return;
+            }
+            if (customConfig.mode === 'without' && n > totalBalls) {
+                alert(`Ở chế độ không hoàn trả, số lần thử (n = ${n}) không thể lớn hơn tổng số bi trong túi (tổng = ${totalBalls}). Hệ thống sẽ tự động đặt n = ${totalBalls}.`);
+                ui.elements.nInput.value = totalBalls;
+                n = totalBalls;
             }
             engine = new SimulationEngine(currentType, customConfig);
         } else if (currentType === SIM_TYPES.BIRTHDAY) {
@@ -128,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ui.renderTable(data.results);
             ui.renderChart(data.results);
             ui.renderConvergenceChart(data.history, theoreticalProb);
-            ui.showAIInsights(n, data.results);
+            ui.showAIInsights(data.n, data.results);
         } catch (error) {
             console.error('Simulation failed:', error);
             alert('Có lỗi xảy ra trong quá trình mô phỏng.');

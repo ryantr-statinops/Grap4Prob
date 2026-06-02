@@ -6,6 +6,7 @@ export class UIController {
     constructor() {
         1
         this.chart = null;
+        this.convergenceChart = null;
         this.elements = {
             title: document.getElementById('main-title'),
             desc: document.getElementById('main-description'),
@@ -135,9 +136,9 @@ export class UIController {
             return `
                 <tr>
                     <td><span class="badge" style="background: ${res.color || 'rgba(0,210,255,0.2)'}">${res.label}</span></td>
-                    <td><code style="color: #94a3b8;">${res.count.toLocaleString()}</code></td>
-                    <td style="font-weight: 600; color: #0F172A;">${res.empiricalProb.toFixed(3)}%</td>
-                    <td style="color: #94a3b8;">${res.theoreticalProb.toFixed(3)}%</td>
+                    <td><code style="color: var(--text-muted);">${res.count.toLocaleString()}</code></td>
+                    <td style="font-weight: 600; color: var(--text-main);">${res.empiricalProb.toFixed(3)}%</td>
+                    <td style="color: var(--text-muted);">${res.theoreticalProb.toFixed(3)}%</td>
                     <td style="color: ${errorColor}; font-family: monospace;">
                         ${res.error > 0 ? '+' : ''}${res.error.toFixed(4)}%
                     </td>
@@ -146,11 +147,42 @@ export class UIController {
         }).join('');
     }
 
+    getThemeColors() {
+        const style = getComputedStyle(document.documentElement);
+        return {
+            grid: style.getPropertyValue('--chart-grid').trim(),
+            tick: style.getPropertyValue('--chart-tick').trim(),
+            legend: style.getPropertyValue('--chart-legend').trim(),
+        };
+    }
+
+    updateChartTheme() {
+        const colors = this.getThemeColors();
+        const updateOptions = (chart) => {
+            if (!chart) return;
+            chart.options.scales.y.grid.color = colors.grid;
+            chart.options.scales.y.ticks.color = colors.tick;
+            chart.options.scales.x.grid.color = colors.grid;
+            chart.options.scales.x.ticks.color = colors.tick;
+            chart.options.plugins.legend.labels.color = colors.legend;
+            if (chart.options.scales.x.title) {
+                chart.options.scales.x.title.color = colors.tick;
+            }
+            if (chart.options.scales.y.title) {
+                chart.options.scales.y.title.color = colors.tick;
+            }
+            chart.update('none');
+        };
+        updateOptions(this.chart);
+        updateOptions(this.convergenceChart);
+    }
+
     renderChart(results) {
         const ctx = document.getElementById('mainChart').getContext('2d');
         const labels = results.map(r => r.label);
         const empiricalData = results.map(r => r.empiricalProb);
         const theoreticalData = results.map(r => r.theoreticalProb);
+        const theme = this.getThemeColors();
 
         if (this.chart) {
             // Incremental update — animate bars growing
@@ -193,17 +225,17 @@ export class UIController {
                 scales: {
                     y: {
                         beginAtZero: true,
-                        grid: { color: 'rgba(255,255,255,0.05)' },
-                        ticks: { color: '#94a3b8' }
+                        grid: { color: theme.grid },
+                        ticks: { color: theme.tick }
                     },
                     x: {
                         grid: { display: false },
-                        ticks: { color: '#94a3b8' }
+                        ticks: { color: theme.tick }
                     }
                 },
                 plugins: {
                     legend: {
-                        labels: { color: '#475569', font: { family: 'Outfit' } }
+                        labels: { color: theme.legend, font: { family: 'Outfit' } }
                     }
                 }
             }
@@ -212,6 +244,7 @@ export class UIController {
 
     renderConvergenceChart(history, theoreticalProb) {
         const ctx = document.getElementById('convergenceChart').getContext('2d');
+        const theme = this.getThemeColors();
 
         if (this.convergenceChart) {
             // Incremental update — draw more points as simulation progresses
@@ -257,19 +290,19 @@ export class UIController {
                 scales: {
                     x: {
                         type: 'linear',
-                        title: { display: true, text: 'Số lần thử (n)', color: '#94a3b8' },
-                        grid: { color: 'rgba(255,255,255,0.05)' },
-                        ticks: { color: '#94a3b8' }
+                        title: { display: true, text: 'Số lần thử (n)', color: theme.tick },
+                        grid: { color: theme.grid },
+                        ticks: { color: theme.tick }
                     },
                     y: {
-                        title: { display: true, text: 'Tỉ lệ (%)', color: '#94a3b8' },
-                        grid: { color: 'rgba(255,255,255,0.05)' },
-                        ticks: { color: '#94a3b8' }
+                        title: { display: true, text: 'Tỉ lệ (%)', color: theme.tick },
+                        grid: { color: theme.grid },
+                        ticks: { color: theme.tick }
                     }
                 },
                 plugins: {
                     legend: {
-                        labels: { color: '#475569', font: { family: 'Outfit' } }
+                        labels: { color: theme.legend, font: { family: 'Outfit' } }
                     }
                 }
             }
@@ -305,6 +338,50 @@ export class UIController {
         }
 
         this.elements.aiContent.innerHTML = insight;
+    }
+
+    renderBuffonVis(n) {
+        const canvas = this.elements.canvas;
+        const ctx = canvas.getContext('2d');
+        const width = canvas.offsetWidth;
+        const height = canvas.offsetHeight;
+        canvas.width = width;
+        canvas.height = height;
+
+        ctx.clearRect(0, 0, width, height);
+        
+        // Draw Lines (vertical grid lines)
+        const spacing = 60;
+        ctx.strokeStyle = 'rgba(15, 23, 42, 0.12)';
+        ctx.lineWidth = 1.5;
+        for (let x = 0; x < width; x += spacing) {
+            ctx.beginPath();
+            ctx.moveTo(x, 0);
+            ctx.lineTo(x, height);
+            ctx.stroke();
+        }
+
+        // Draw Needles (only show 200 for performance and clarity)
+        const displayLimit = Math.min(n, 200);
+        for (let i = 0; i < displayLimit; i++) {
+            const x = Math.random() * width;
+            const y = Math.random() * height;
+            const angle = Math.random() * Math.PI;
+            const length = spacing; // L = D
+
+            const x2 = x + Math.cos(angle) * length;
+            const y2 = y + Math.sin(angle) * length;
+
+            // Check if touches a line
+            const hit = Math.floor(x / spacing) !== Math.floor(x2 / spacing);
+
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            ctx.lineTo(x2, y2);
+            ctx.strokeStyle = hit ? '#ff007a' : 'rgba(0, 210, 255, 0.5)';
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+        }
     }
 
     setLoading(isLoading) {

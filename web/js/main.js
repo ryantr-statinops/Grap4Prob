@@ -9,6 +9,28 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentType = null;
     let engine = null;
 
+    // ===== Theme System =====
+    function initTheme() {
+        const saved = localStorage.getItem('graph4prob-theme') || 'light';
+        document.documentElement.setAttribute('data-theme', saved);
+        ui.setThemeIcon(saved);
+        // Update chart colors after charts are created (lazy: called after render)
+    }
+
+    function toggleTheme() {
+        const current = document.documentElement.getAttribute('data-theme');
+        const next = current === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', next);
+        localStorage.setItem('graph4prob-theme', next);
+        ui.setThemeIcon(next);
+        // Update existing chart colors to match new theme
+        ui.updateChartTheme();
+    }
+
+    initTheme();
+
+    document.getElementById('settingsBtn').addEventListener('click', toggleTheme);
+
     // Initial State — show welcome, no module selected
     ui.showWelcome();
 

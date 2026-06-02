@@ -1,8 +1,8 @@
 /**
  * Main Entry Point for TTK-AI
  */
-import { SimulationEngine, SIM_TYPES } from './simulation.js?v=3.2';
-import { UIController } from './ui.js?v=3.2';
+import { SimulationEngine, SIM_TYPES } from './simulation.js?v=3.3';
+import { UIController } from './ui.js?v=3.3';
 
 document.addEventListener('DOMContentLoaded', () => {
     const ui = new UIController();

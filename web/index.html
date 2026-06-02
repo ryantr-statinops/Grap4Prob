@@ -18,7 +18,7 @@
         <div class="nav-inner">
             <div class="nav-brand">
                 <span class="nav-logo">🎲</span> <!-- thay ảnh logo vào đây-->
-                <span class="nav-title"> Grapd4Prob | Easy understand Probability Simulator</span>
+                <span class="nav-title"> Graph4Prob | Easy understand Probability Simulator</span>
             </div>
             <div class="nav-actions">
                 <button class="nav-settings-btn" id="settingsBtn" title="Cài đặt">
@@ -36,7 +36,8 @@
         <header class="top-bar glass">
             <div class="bottom-row">
                 <div class="module-selector-wrapper">
-                    <select id="moduleSelect" class="module-select">
+                    <select id="moduleSelect" class="module-select" required>
+                        <option value="" disabled selected>-- Chọn kiểu mô phỏng --</option>
                         <option value="dice">🎲 Xúc xắc (Dice)</option>
                         <option value="coin">🪙 Đồng xu (Coin)</option>
                         <option value="card">🃏 Lá bài (Cards)</option>
@@ -49,7 +50,7 @@
                 </div>
                 <div class="input-group">
                     <label for="numTrials" class="input-label">Số lần thử (n)</label>
-                    <input type="number" id="numTrials" value="1000" min="1" max="1000000">
+                    <input type="number" id="numTrials" placeholder="Hãy nhập số lần thử" min="1" max="1000000">
                 </div>
                 <div id="dynamic-inputs" class="dynamic-inputs"></div>
                 <button id="runBtn" class="btn-primary">▶ Bắt đầu mô phỏng</button>

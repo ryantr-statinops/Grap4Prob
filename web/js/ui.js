@@ -21,6 +21,14 @@ export class UIController {
         };
     }
 
+    showWelcome() {
+        this.elements.title.textContent = '🎲 Graph4Prob — Mô phỏng Xác suất';
+        this.elements.desc.textContent = 'Chọn một kiểu mô phỏng từ menu bên dưới để bắt đầu khám phá.';
+        this.elements.statusIcon.textContent = '🎯';
+        document.getElementById('dynamic-inputs').innerHTML = '';
+        this.elements.specialVis.style.display = 'none';
+    }
+
     updateHeader(type) {
         if (type === 'dice') {
             this.elements.title.textContent = 'Mô phỏng Xúc xắc';

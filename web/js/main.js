@@ -6,11 +6,11 @@ import { UIController } from './ui.js?v=3.2';
 
 document.addEventListener('DOMContentLoaded', () => {
     const ui = new UIController();
-    let currentType = SIM_TYPES.DICE;
-    let engine = new SimulationEngine(currentType);
+    let currentType = null;
+    let engine = null;
 
-    // Initial State
-    ui.updateHeader(currentType);
+    // Initial State — show welcome, no module selected
+    ui.showWelcome();
 
     // Module Switcher — Dropdown
     const switchMode = (type) => {
@@ -34,14 +34,20 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     document.getElementById('moduleSelect').addEventListener('change', (e) => {
-        switchMode(e.target.value);
+        if (e.target.value) {
+            switchMode(e.target.value);
+        }
     });
 
     // Run Simulation
     ui.elements.runBtn.addEventListener('click', async () => {
+        if (!currentType) {
+            alert('Vui lòng chọn kiểu mô phỏng trước!');
+            return;
+        }
         const n = parseInt(ui.elements.nInput.value);
         if (isNaN(n) || n <= 0) {
-            alert('Vui lòng nhập số lần thử hợp lệ!');
+            alert('Vui lòng nhập số lần thử!');
             return;
         }
 

@@ -639,10 +639,13 @@ export class UIController {
     setLoading(isLoading) {
         if (isLoading) {
             this.elements.runBtn.disabled = true;
-            this.elements.runBtn.textContent = '⏳ Đang mô phỏng...';
+            this.elements.runBtn.innerHTML = '<i data-lucide="loader-2" class="animate-spin"></i> Đang mô phỏng...';
         } else {
             this.elements.runBtn.disabled = false;
-            this.elements.runBtn.textContent = '▶ Bắt đầu mô phỏng';
+            this.elements.runBtn.innerHTML = '<i data-lucide="play"></i> Bắt đầu mô phỏng';
+        }
+        if (typeof lucide !== 'undefined' && lucide.createIcons) {
+            lucide.createIcons();
         }
     }
 

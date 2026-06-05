@@ -28,6 +28,16 @@ document.addEventListener('DOMContentLoaded', () => {
     initTheme();
     document.getElementById('settingsBtn').addEventListener('click', toggleTheme);
 
+    // ===== Enter shortcut =====
+    ui.elements.nInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') ui.elements.runBtn.click();
+    });
+
+    // ===== Lucide icons init =====
+    if (typeof lucide !== 'undefined' && lucide.createIcons) {
+        lucide.createIcons();
+    }
+
     // ===== Spotlight: vệt sáng theo chuột =====
     window.addEventListener('mousemove', (e) => {
         document.documentElement.style.setProperty('--mouse-x', e.clientX + 'px');

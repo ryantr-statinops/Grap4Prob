@@ -612,6 +612,24 @@ td {
     margin-bottom: 15px;
 }
 
+/* ===== Lucide Icons ===== */
+i[data-lucide] {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.125em;
+    stroke-width: 2;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.animate-spin {
+    animation: spin 1s linear infinite;
+}
+
 /* Animations */
 .fade-in {
     animation: fadeIn 0.8s ease-in;

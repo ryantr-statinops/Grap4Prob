@@ -8,7 +8,14 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <meta name="description" content="Graph4Prob - Probability Simulator: khám phá Luật số lớn qua mô phỏng xúc xắc, đồng xu, bài, bi, và hơn thế nữa với biểu đồ trực quan & AI phân tích.">
+    <meta property="og:title" content="Graph4Prob | Probability Simulator">
+    <meta property="og:description" content="Mô phỏng xác suất trực quan với 8 kiểu mô phỏng, biểu đồ động, và AI phân tích Luật số lớn.">
+    <meta property="og:image" content="assets/logo/graph4prob_logo.png">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
     <link rel="icon" type="image/png" href="assets/logo/graph4prob_logo.png">
+    <script src="https://unpkg.com/lucide@latest" defer></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -47,7 +54,7 @@
                         <option value="buffon">🪡 Kim Buffon (Pi)</option>
                         <option value="galton">🛝 Bàn Galton (CLT)</option>
                     </select>
-                    <button class="tooltip-trigger" id="simTooltip" title="Tìm hiểu thêm">ⓘ</button>
+                    <button class="tooltip-trigger" id="simTooltip" title="Tìm hiểu thêm"><i data-lucide="info"></i></button>
                     <div class="tooltip-popup" id="simTooltipPopup">
                         <div class="tooltip-arrow"></div>
                         <strong id="tooltipTitle">Xúc xắc (Dice)</strong>
@@ -66,7 +73,7 @@
                     </div>
                 </div>
                 <div id="dynamic-inputs" class="dynamic-inputs"></div>
-                <button id="runBtn" class="btn-primary">▶ Bắt đầu mô phỏng</button>
+                <button id="runBtn" class="btn-primary"><i data-lucide="play"></i> Bắt đầu mô phỏng</button>
             </div>
             <div class="progress-container" id="progressContainer" style="display: none;">
                 <div class="progress-bar-bg">
@@ -78,14 +85,14 @@
         <main>
             <section class="empty-state" id="emptyState">
                 <div class="empty-illustration">
-                    <span class="empty-icon">📊</span>
+                    <span class="empty-icon"><i data-lucide="bar-chart-3"></i></span>
                 </div>
                 <h2 class="empty-title">Chào mừng đến với Graph4Prob</h2>
-                <p class="empty-desc">Chọn một kiểu mô phỏng từ menu bên trên, nhập số lần thử, và nhấn <strong>▶ Bắt đầu mô phỏng</strong> để khám phá Luật số lớn!</p>
+                <p class="empty-desc">Chọn một kiểu mô phỏng từ menu bên trên, nhập số lần thử, và nhấn <strong><i data-lucide="play"></i> Bắt đầu mô phỏng</strong> để khám phá Luật số lớn!</p>
                 <div class="empty-features">
-                    <div class="empty-feature"><span>🎲</span><span>8 kiểu mô phỏng</span></div>
-                    <div class="empty-feature"><span>📈</span><span>Biểu đồ trực quan</span></div>
-                    <div class="empty-feature"><span>🧠</span><span>AI phân tích</span></div>
+                    <div class="empty-feature"><i data-lucide="dices"></i><span>8 kiểu mô phỏng</span></div>
+                    <div class="empty-feature"><i data-lucide="trending-up"></i><span>Biểu đồ trực quan</span></div>
+                    <div class="empty-feature"><i data-lucide="brain"></i><span>AI phân tích</span></div>
                 </div>
             </section>
             <section class="hero-section glass" id="heroSection" style="display: none;">
@@ -94,28 +101,28 @@
             </section>
             <div class="summary-grid" id="summaryGrid" style="display: none;">
                 <div class="summary-card glass">
-                    <div class="summary-icon" style="background: rgba(37, 99, 235, 0.1);">📊</div>
+                    <div class="summary-icon" style="background: rgba(37, 99, 235, 0.1);"><i data-lucide="bar-chart-3"></i></div>
                     <div class="summary-info">
                         <span class="summary-value" id="summaryTrials">0</span>
                         <span class="summary-label">Tổng số thử</span>
                     </div>
                 </div>
                 <div class="summary-card glass">
-                    <div class="summary-icon" style="background: rgba(34, 197, 94, 0.1);">🎯</div>
+                    <div class="summary-icon" style="background: rgba(34, 197, 94, 0.1);"><i data-lucide="target"></i></div>
                     <div class="summary-info">
                         <span class="summary-value" id="summaryError">0%</span>
                         <span class="summary-label">Sai số TB</span>
                     </div>
                 </div>
                 <div class="summary-card glass">
-                    <div class="summary-icon" style="background: rgba(168, 85, 247, 0.1);">📈</div>
+                    <div class="summary-icon" style="background: rgba(168, 85, 247, 0.1);"><i data-lucide="trending-up"></i></div>
                     <div class="summary-info">
                         <span class="summary-value" id="summaryConvergence">--</span>
                         <span class="summary-label">Hội tụ</span>
                     </div>
                 </div>
                 <div class="summary-card glass">
-                    <div class="summary-icon" style="background: rgba(245, 158, 11, 0.1);">⚡</div>
+                    <div class="summary-icon" style="background: rgba(245, 158, 11, 0.1);"><i data-lucide="zap"></i></div>
                     <div class="summary-info">
                         <span class="summary-value" id="summaryBest">--</span>
                         <span class="summary-label">Kết quả tốt nhất</span>
@@ -143,7 +150,7 @@
                     <div class="card-header">
                         <h3 class="card-title">Phân phối tần suất</h3>
                         <div class="card-actions">
-                            <button class="export-btn" id="exportChartPng" title="Xuất biểu đồ PNG">📷 PNG</button>
+                            <button class="export-btn" id="exportChartPng" title="Xuất biểu đồ PNG"><i data-lucide="camera"></i> PNG</button>
                         </div>
                     </div>
                     <div class="chart-wrap">
@@ -154,7 +161,7 @@
                     <div class="card-header">
                         <h3 class="card-title">Kết quả chi tiết</h3>
                         <div class="card-actions">
-                            <button class="export-btn" id="exportTableCsv" title="Xuất bảng CSV">📄 CSV</button>
+                            <button class="export-btn" id="exportTableCsv" title="Xuất bảng CSV"><i data-lucide="file-text"></i> CSV</button>
                         </div>
                     </div>
                     <div class="table-scroll">
@@ -172,7 +179,7 @@
                 </div>
             </section>
             <section id="aiSection" class="ai-panel glass" style="display: none;">
-                <div class="ai-badge">🧠 NHẬN XÉT</div>
+                <div class="ai-badge"><i data-lucide="brain"></i> NHẬN XÉT</div>
                 <div id="aiContent"></div>
             </section>
         </main>

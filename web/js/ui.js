@@ -93,6 +93,9 @@ export class UIController {
         this.elements.emptyState.style.display = 'none';
         this.elements.heroSection.style.display = '';
 
+        // Trigger entrance animation (reset + replay)
+        this.animateHeroSection();
+
         if (type === 'dice') {
             this.elements.title.textContent = 'Mô phỏng Xúc xắc';
             this.elements.desc.textContent = 'Xác suất lý thuyết cho mỗi mặt của xúc xắc 6 mặt là 1/6 (≈ 16.67%).';
@@ -132,6 +135,15 @@ export class UIController {
         }
 
         document.getElementById('dynamic-inputs').innerHTML = '';
+    }
+
+    // ===== Module Switch Animation =====
+    animateHeroSection() {
+        const el = this.elements.heroSection;
+        el.classList.remove('header-enter');
+        // Force reflow to restart animation
+        void el.offsetWidth;
+        el.classList.add('header-enter');
     }
 
     renderDynamicInputs(type) {

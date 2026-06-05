@@ -114,6 +114,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (currentType === SIM_TYPES.URN && customConfig) {
             const total = customConfig.red + customConfig.blue + customConfig.green + customConfig.yellow + customConfig.purple;
             theoreticalProb = total > 0 ? (customConfig.red / total) * 100 : 0;
+        } else if (currentType === SIM_TYPES.GALTON) {
+            theoreticalProb = engine.getIndividualTheoreticalProb(0);
         }
 
         ui.setLoading(true);

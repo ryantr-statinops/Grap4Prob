@@ -53,7 +53,7 @@ export class SimulationEngine {
                 labels: ['Bích (Spades) ♠', 'Cơ (Hearts) ♥', 'Rô (Diamonds) ♦', 'Chuồn (Clubs) ♣'],
                 icon: '🃏',
                 isTrackingFirstOnly: false,
-                colors: ['#1e293b', '#ef4444', '#f87171', '#334155'],
+                colors: ['#3b82f6', '#ef4444', '#eab308', '#22c55e'],
                 bag: bag,
                 mode: mode
             };

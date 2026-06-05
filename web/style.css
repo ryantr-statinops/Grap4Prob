@@ -1,7 +1,7 @@
 :root {
     /* Background */
-    --dot-color: rgba(59, 130, 246, 0.12);
-    --spotlight-color: rgba(59, 130, 246, 0.08);
+    --dot-color: rgba(59, 130, 246, 0.25);
+    --spotlight-color: rgba(59, 130, 246, 0.15);
 
     /* Brilliant.org style tokens (Option B: white canvas + bordered cards) */
     --primary: #2563EB; /* Brand Blue 600 */
@@ -67,8 +67,8 @@
 
 /* ===== Dark Mode ===== */
 [data-theme="dark"] {
-    --dot-color: rgba(59, 130, 246, 0.18);
-    --spotlight-color: rgba(59, 130, 246, 0.12);
+    --dot-color: rgba(59, 130, 246, 0.30);
+    --spotlight-color: rgba(99, 102, 241, 0.18);
 
     --primary: #3B82F6; /* Blue 500 — brighter on dark */
     --primary-glow: rgba(59, 130, 246, 0.3);

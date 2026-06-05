@@ -359,10 +359,6 @@ export class UIController {
             chart.options.scales.x.grid.color = colors.grid;
             chart.options.scales.x.ticks.color = colors.tick;
             chart.options.plugins.legend.labels.color = colors.legend;
-            // Update datalabels color for bar chart
-            if (chart.options.plugins.datalabels) {
-                chart.options.plugins.datalabels.color = colors.tick;
-            }
             if (chart.options.scales.x.title) {
                 chart.options.scales.x.title.color = colors.tick;
             }
@@ -383,11 +379,6 @@ export class UIController {
         const theoreticalData = results.map(r => r.theoreticalProb);
         const theme = this.getThemeColors();
         const self = this;
-
-        // Register datalabels plugin globally (nếu CDN load thành công)
-        if (typeof ChartDataLabels !== 'undefined' && !Chart.registry.plugins.get('datalabels')) {
-            Chart.register(ChartDataLabels);
-        }
 
         const toBarBackground = (color, alpha) => {
             if (!color) return `rgba(0, 210, 255, ${alpha})`;
@@ -502,17 +493,6 @@ export class UIController {
                                 return `  ${res.theoreticalProb.toFixed(3)}%`;
                             }
                         }
-                    },
-                    datalabels: {
-                        anchor: 'end',
-                        align: 'end',
-                        color: theme.tick,
-                        font: {
-                            weight: '600',
-                            size: 11
-                        },
-                        offset: 2,
-                        formatter: (value) => value.toFixed(1) + '%'
                     }
                 }
             },

@@ -11,7 +11,7 @@
 ## Truy cập website
 
 truy cập vào đường link sau để sử dụng
-![Link Website](https://ryantr-statinops.github.io/Grap4Prob/)
+[Link Website](https://ryantr-statinops.github.io/Grap4Prob/)
 
 
 ---

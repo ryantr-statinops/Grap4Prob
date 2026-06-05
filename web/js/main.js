@@ -75,6 +75,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let customConfig = null;
         if (currentType === SIM_TYPES.URN) {
+        } else if (currentType === SIM_TYPES.CARD) {
+            customConfig = {
+                mode: document.getElementById('cardMode').value
+            };
+            if (customConfig.mode === 'without' && n > 52) {
+                alert(`Ở chế độ không hoàn trả, số lần thử (n = ${n}) không thể lớn hơn 52 lá bài. Hệ thống sẽ tự động đặt n = 52.`);
+                ui.elements.nInput.value = 52;
+                n = 52;
+            }
+            engine = new SimulationEngine(currentType, customConfig);
+        } else if (currentType === SIM_TYPES.URN) {
             customConfig = {
                 red: parseInt(document.getElementById('urnRed').value) || 0,
                 blue: parseInt(document.getElementById('urnBlue').value) || 0,

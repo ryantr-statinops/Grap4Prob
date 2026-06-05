@@ -39,13 +39,23 @@ export class SimulationEngine {
                 colors: ['#00d2ff', '#3a7bd5']
             };
         } else if (type === SIM_TYPES.CARD) {
+            const mode = customConfig?.mode || 'with';
+            // Bộ bài 52 lá: 13 lá mỗi chất
+            const bag = [];
+            for (let s = 0; s < 4; s++) {
+                for (let r = 0; r < 13; r++) {
+                    bag.push(s);
+                }
+            }
             return {
                 faces: [0, 1, 2, 3],
                 theoreticalProb: 25,
                 labels: ['Bích (Spades) ♠', 'Cơ (Hearts) ♥', 'Rô (Diamonds) ♦', 'Chuồn (Clubs) ♣'],
                 icon: '🃏',
                 isTrackingFirstOnly: false,
-                colors: ['#1e293b', '#ef4444', '#f87171', '#334155']
+                colors: ['#1e293b', '#ef4444', '#f87171', '#334155'],
+                bag: bag,
+                mode: mode
             };
         } else if (type === SIM_TYPES.URN) {
             const red = customConfig?.red || 0;
@@ -191,7 +201,7 @@ export class SimulationEngine {
 
         const bag = this.config.bag;
         let currentBag = null;
-        if (this.type === SIM_TYPES.URN && this.config.mode === 'without') {
+        if ((this.type === SIM_TYPES.URN || this.type === SIM_TYPES.CARD) && this.config.mode === 'without') {
             currentBag = [...bag];
         }
 
@@ -259,6 +269,19 @@ export class SimulationEngine {
                     if (Math.random() > 0.5) position++;
                 }
                 roll = position;
+            } else if (this.type === SIM_TYPES.CARD) {
+                if (this.config.mode === 'without') {
+                    if (currentBag.length === 0) {
+                        n = i - 1;
+                        break;
+                    }
+                    const idx = Math.floor(Math.random() * currentBag.length);
+                    roll = currentBag[idx];
+                    currentBag.splice(idx, 1);
+                } else {
+                    const idx = Math.floor(Math.random() * bag.length);
+                    roll = bag[idx];
+                }
             } else {
                 roll = Math.floor(Math.random() * this.config.faces.length);
             }

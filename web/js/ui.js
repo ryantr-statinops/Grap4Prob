@@ -28,43 +28,37 @@ export class UIController {
         if (type === 'dice') {
             this.elements.title.textContent = 'Mô phỏng Xúc xắc';
             this.elements.desc.textContent = 'Xác suất lý thuyết cho mỗi mặt của xúc xắc 6 mặt là 1/6 (≈ 16.67%).';
-            this.elements.statusIcon.textContent = '🎲';
         } else if (type === 'coin') {
             this.elements.title.textContent = 'Mô phỏng Tung đồng xu';
             this.elements.desc.textContent = 'Xác suất lý thuyết cho mỗi mặt của đồng xu cân đối là 1/2 (50%).';
-            this.elements.statusIcon.textContent = '🪙';
         } else if (type === 'card') {
             this.elements.title.textContent = 'Mô phỏng Rút lá bài';
             this.elements.desc.textContent = 'Xác suất lý thuyết để rút được một chất (Cơ, Rô, Chuồn, Bích) là 1/4 (25%).';
-            this.elements.statusIcon.textContent = '🃏';
+            this.renderDynamicInputs(type);
+            return;
         } else if (type === 'urn') {
             this.elements.title.textContent = 'Mô phỏng Rút bi có hoàn trả (Urn Problem)';
             this.elements.desc.textContent = 'Xác suất rút được một viên bi phụ thuộc vào số lượng bi của màu đó chia cho tổng số bi trong túi.';
-            this.elements.statusIcon.textContent = '🎱';
             this.renderDynamicInputs(type);
             return;
         } else if (type === 'monty') {
             this.elements.title.textContent = 'Nghịch lý Monty Hall';
             this.elements.desc.textContent = 'Bạn chọn 1 cửa. Host mở 1 cửa Dê. Bạn có nên đổi cửa không? (Luôn luôn ĐỔI có xác suất thắng 66.67%)';
-            this.elements.statusIcon.textContent = '🚪';
             this.renderDynamicInputs(type);
             return;
         } else if (type === 'birthday') {
             this.elements.title.textContent = 'Nghịch lý Ngày sinh (Birthday Paradox)';
             this.elements.desc.textContent = 'Xác suất để trong một nhóm N người có ít nhất 2 người trùng ngày sinh.';
-            this.elements.statusIcon.textContent = '🎂';
             this.renderDynamicInputs(type);
             return;
         } else if (type === 'buffon') {
             this.elements.title.textContent = 'Kim Buffon (Ước lượng số Pi)';
             this.elements.desc.textContent = 'Mô phỏng việc thả một cây kim lên mặt phẳng có các đường kẻ song song để ước lượng giá trị của số π.';
-            this.elements.statusIcon.textContent = '🪡';
             this.renderDynamicInputs(type);
             return;
         } else if (type === 'galton') {
             this.elements.title.textContent = 'Bàn Galton (Định lý Giới hạn Trung tâm)';
             this.elements.desc.textContent = 'Các viên bi rơi qua các hàng đinh ngẫu nhiên sẽ hội tụ về Phân phối Chuẩn (Bell Curve).';
-            this.elements.statusIcon.textContent = '🛝';
             this.renderDynamicInputs(type);
             return;
         }
@@ -75,7 +69,17 @@ export class UIController {
 
     renderDynamicInputs(type) {
         const container = document.getElementById('dynamic-inputs');
-        if (type === 'urn') {
+        if (type === 'card') {
+            container.innerHTML = `
+                <div class="dyn-group">
+                    <label class="dyn-label" style="color: var(--text-muted);">Chế độ rút</label>
+                    <select class="dyn-input" id="cardMode" style="width: 250px; height: 48px; padding: 12px; border-radius: 14px; background: var(--surface); border: 1px solid var(--border); outline: none; cursor: pointer; font-size: 1rem; color: var(--text-main);">
+                        <option value="with" selected>Có hoàn trả (With Replacement)</option>
+                        <option value="without">Không hoàn trả (Without Replacement)</option>
+                    </select>
+                </div>
+            `;
+        } else if (type === 'urn') {
             container.innerHTML = `
                 <div class="dyn-group">
                     <label class="dyn-label" style="color: #ef4444;">🔴 Đỏ</label>

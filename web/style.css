@@ -929,7 +929,7 @@ table code {
 }
 
 .empty-icon {
-    font-size: 4rem;
+    font-size: 6rem;
     display: inline-block;
     animation: float 3s ease-in-out infinite;
 }

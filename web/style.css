@@ -1004,6 +1004,21 @@ table code {
     cursor: default;
 }
 
+@keyframes cardFadeSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(16px) scale(0.97);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.summary-card.card-enter {
+    animation: cardFadeSlideUp 0.4s ease-out both;
+}
+
 .summary-card:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 24px rgba(37, 99, 235, 0.08);

@@ -240,6 +240,16 @@ export class UIController {
     // ===== Summary Cards =====
     renderSummaryCards(n, results) {
         this.elements.summaryGrid.style.display = 'grid';
+
+        // Trigger staggered entrance animation
+        const cards = this.elements.summaryGrid.querySelectorAll('.summary-card');
+        cards.forEach((card, i) => {
+            card.classList.remove('card-enter');
+            card.style.animationDelay = (i * 0.08) + 's';
+            void card.offsetWidth;
+            card.classList.add('card-enter');
+        });
+
         document.getElementById('summaryTrials').textContent = n.toLocaleString();
 
         const avgError = results.reduce((sum, r) => sum + r.error, 0) / results.length;

@@ -10,7 +10,7 @@
 
 ## 💎 Giao diện Ứng dụng
 
-![TTK Probability Mockup](C:/Users/Admin/.gemini/antigravity/brain/2b37f535-8763-4332-acb4-e3f1f4a2a5f8/ttk_probability_mockup_1778556601973.png)
+![Link Website](https://ryantr-statinops.github.io/Grap4Prob/)
 *Giao diện hiện đại với phong cách Glassmorphism và Dark Mode.*
 
 ---

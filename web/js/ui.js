@@ -237,18 +237,17 @@ export class UIController {
         const best = results.reduce((min, r) => r.error < min.error ? r : min, results[0]);
         document.getElementById('summaryBest').textContent = best.label.split(' ')[0] + ' (' + best.error.toFixed(2) + '%)';
 
-        // Convergence status
-        const converged = avgError < 1;
+        // Convergence status — dựa trên sai số thực tế, không phải n
         const convergenceEl = document.getElementById('summaryConvergence');
-        if (n < 500) {
-            convergenceEl.textContent = 'Đang chạy...';
-            convergenceEl.style.color = 'var(--text-muted)';
-        } else if (converged) {
+        if (avgError < 0.5) {
             convergenceEl.textContent = '✅ Đã hội tụ';
             convergenceEl.style.color = '#22c55e';
-        } else {
+        } else if (avgError < 5) {
             convergenceEl.textContent = '⚠️ Gần hội tụ';
             convergenceEl.style.color = '#eab308';
+        } else {
+            convergenceEl.textContent = '🔄 Đang hội tụ';
+            convergenceEl.style.color = 'var(--text-muted)';
         }
     }
 

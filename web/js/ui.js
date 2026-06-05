@@ -235,7 +235,7 @@ export class UIController {
 
         // Find best match (lowest error)
         const best = results.reduce((min, r) => r.error < min.error ? r : min, results[0]);
-        document.getElementById('summaryBest').textContent = best.label.split(' ')[0] + ' (' + best.error.toFixed(2) + '%)';
+        document.getElementById('summaryBest').textContent = best.label + ' (' + best.error.toFixed(2) + '%)';
 
         // Convergence status — dựa trên sai số thực tế, không phải n
         const convergenceEl = document.getElementById('summaryConvergence');

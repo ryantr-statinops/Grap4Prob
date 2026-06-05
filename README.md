@@ -1,21 +1,22 @@
-# 🎲 TTK Probability | Educational Simulation Suite
+# Graph4Prob | Visualizing & Simulating Probability
 
 [![Version](https://img.shields.io/badge/version-3.2-blue.svg)](https://github.com/ryantr-statinops/simulator_propability_web)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Tech](https://img.shields.io/badge/tech-Vanilla%20JS-yellow.svg)](#)
 
-**TTK Probability** là một bộ công cụ web cao cấp được thiết kế để trực quan hóa các khái niệm xác suất và thống kê phức tạp một cách trực quan và sinh động. Dự án tập trung vào việc minh họa **Luật số lớn (Law of Large Numbers)** và **Định lý giới hạn trung tâm (Central Limit Theorem)** thông qua các mô phỏng thời gian thực.
+**Grap4Prob** là một website được thiết kế để trực quan hóa các khái niệm xác suất và thống kê phức tạp một cách trực quan và sinh động. Dự án tập trung vào việc minh họa **Luật số lớn (Law of Large Numbers)** và **Định lý giới hạn trung tâm (Central Limit Theorem)** thông qua các mô phỏng thời gian thực.
 
 ---
 
-## 💎 Giao diện Ứng dụng
+## Truy cập website
 
+truy cập vào đường link sau để sử dụng
 ![Link Website](https://ryantr-statinops.github.io/Grap4Prob/)
-*Giao diện hiện đại với phong cách Glassmorphism và Dark Mode.*
+
 
 ---
 
-## ✨ Tính năng nổi bật
+## Tính năng nổi bật
 
 Ứng dụng cung cấp một loạt các module mô phỏng đa dạng:
 
@@ -30,7 +31,7 @@
 
 ---
 
-## 🛠️ Công nghệ sử dụng
+## Công nghệ sử dụng
 
 Dự án được xây dựng với tiêu chí nhẹ, nhanh và hiện đại:
 
@@ -41,7 +42,7 @@ Dự án được xây dựng với tiêu chí nhẹ, nhanh và hiện đại:
 
 ---
 
-## 🚀 Hướng dẫn cài đặt và sử dụng
+## Hướng dẫn cài đặt và sử dụng (dành cho developer)
 
 Vì dự án sử dụng **ES Modules**, bạn cần chạy qua một web server hoặc mở bằng các trình duyệt hiện đại.
 
@@ -59,7 +60,7 @@ Vì dự án sử dụng **ES Modules**, bạn cần chạy qua một web server
 
 ---
 
-## 📊 Cấu trúc dự án
+## Cấu trúc dự án
 
 ```text
 /
@@ -76,10 +77,10 @@ Vì dự án sử dụng **ES Modules**, bạn cần chạy qua một web server
 
 ---
 
-## 📝 Giấy phép
+## Giấy phép
 
 Dự án này được phát hành dưới giấy phép [MIT](LICENSE). Tự do sử dụng cho mục đích học tập và nghiên cứu.
 
 ---
 
-*Phát triển bởi **TTK-AI Team** | Visualizing the beauty of mathematics.*
+*Phát triển bởi **Quốc Khang (ryantr-statinops) & Quốc Thành (ThanhData)** 

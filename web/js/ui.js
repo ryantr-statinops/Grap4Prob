@@ -217,6 +217,17 @@ export class UIController {
 
     hideSkeleton() {
         this.elements.skeletonContainer.style.display = 'none';
+        // Trigger entrance animation for result cards
+        const cards = [
+            document.getElementById('chartCard'),
+            document.getElementById('convergenceCard')
+        ];
+        cards.forEach(card => {
+            if (!card) return;
+            card.classList.remove('result-enter');
+            void card.offsetWidth;
+            card.classList.add('result-enter');
+        });
     }
 
     // ===== Progress =====

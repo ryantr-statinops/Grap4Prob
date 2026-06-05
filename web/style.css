@@ -654,6 +654,23 @@ button i[data-lucide] {
     animation: fadeSlideIn 0.35s ease-out both;
 }
 
+/* ===== Result Cards Entrance Animation ===== */
+@keyframes resultFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#chartCard.result-enter,
+#convergenceCard.result-enter {
+    animation: resultFadeIn 0.45s ease-out both;
+}
+
 /* Animations */
 .fade-in {
     animation: fadeIn 0.8s ease-in;

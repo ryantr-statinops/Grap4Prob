@@ -615,9 +615,9 @@ td {
 /* ===== Lucide Icons ===== */
 i[data-lucide] {
     display: inline-block;
-    width: 1em;
-    height: 1em;
-    vertical-align: -0.125em;
+    width: 1.1em;
+    height: 1.1em;
+    vertical-align: middle;
     stroke-width: 2;
 }
 

@@ -30,8 +30,9 @@
     --nav-bg: rgba(255, 255, 255, 0.92);
 
     /* Chart grid colors */
-    --chart-grid: rgba(255, 255, 255, 0.05);
-    --chart-tick: #94a3b8;
+    --chart-grid: rgba(148, 163, 184, 0.25);
+    --chart-grid-width: 1px;
+    --chart-tick: #64748b;
     --chart-legend: #475569;
 
     /* Code bg */
@@ -91,7 +92,8 @@
 
     --nav-bg: rgba(11, 17, 33, 0.92);
 
-    --chart-grid: rgba(255, 255, 255, 0.06);
+    --chart-grid: rgba(255, 255, 255, 0.10);
+    --chart-grid-width: 1px;
     --chart-tick: #94a3b8;
     --chart-legend: #94a3b8;
 

@@ -378,6 +378,10 @@ export class UIController {
         const empiricalData = results.map(r => r.empiricalProb);
         const theoreticalData = results.map(r => r.theoreticalProb);
         const theme = this.getThemeColors();
+        const self = this;
+
+        // Register datalabels plugin globally
+        Chart.register(ChartDataLabels);
 
         const toBarBackground = (color, alpha) => {
             if (!color) return `rgba(0, 210, 255, ${alpha})`;
@@ -392,6 +396,7 @@ export class UIController {
 
         const barColors = results.map(r => toBarBackground(r.color, 0.65));
         const barBorderColors = results.map(r => r.color || '#00d2ff');
+        const barHoverColors = results.map(r => toBarBackground(r.color, 0.85));
 
         if (this.chart) {
             this.chart.data.labels = labels;
@@ -413,7 +418,8 @@ export class UIController {
                         data: empiricalData,
                         backgroundColor: barColors,
                         borderColor: barBorderColors,
-                        borderWidth: 1,
+                        hoverBackgroundColor: barHoverColors,
+                        borderWidth: 2,
                         borderRadius: 8,
                         order: 2
                     },
@@ -432,23 +438,79 @@ export class UIController {
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
+                animation: {
+                    duration: 800,
+                    easing: 'easeOutQuart'
+                },
+                hover: {
+                    mode: 'index',
+                    intersect: true
+                },
+                onHover: (event, chartElement) => {
+                    event.native.target.style.cursor = chartElement.length > 0 ? 'pointer' : 'default';
+                },
                 scales: {
                     y: {
                         beginAtZero: true,
-                        grid: { color: theme.grid },
-                        ticks: { color: theme.tick }
+                        grid: {
+                            color: theme.grid,
+                            drawBorder: false
+                        },
+                        ticks: {
+                            color: theme.tick,
+                            font: { size: 12 },
+                            callback: (v) => v + '%'
+                        }
                     },
                     x: {
                         grid: { display: false },
-                        ticks: { color: theme.tick }
+                        ticks: {
+                            color: theme.tick,
+                            font: { size: 11 }
+                        }
                     }
                 },
                 plugins: {
                     legend: {
-                        labels: { color: theme.legend, font: { family: 'Outfit' } }
+                        labels: { color: theme.legend, font: { family: 'Outfit', size: 12 } }
+                    },
+                    tooltip: {
+                        enabled: true,
+                        backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                        titleFont: { weight: '700', size: 13 },
+                        bodyFont: { size: 12 },
+                        padding: 12,
+                        cornerRadius: 10,
+                        displayColors: true,
+                        callbacks: {
+                            label: (context) => {
+                                const idx = context.dataIndex;
+                                const res = results[idx];
+                                if (context.datasetIndex === 0) {
+                                    return [
+                                        `  Thực nghiệm: ${res.empiricalProb.toFixed(3)}%`,
+                                        `  Lý thuyết:   ${res.theoreticalProb.toFixed(3)}%`,
+                                        `  Sai số:      ${res.error > 0 ? '+' : ''}${res.error.toFixed(4)}%`
+                                    ];
+                                }
+                                return `  ${res.theoreticalProb.toFixed(3)}%`;
+                            }
+                        }
+                    },
+                    datalabels: {
+                        anchor: 'end',
+                        align: 'end',
+                        color: theme.tick,
+                        font: {
+                            weight: '600',
+                            size: 11
+                        },
+                        offset: 2,
+                        formatter: (value) => value.toFixed(1) + '%'
                     }
                 }
-            }
+            },
+            plugins: [ChartDataLabels]
         });
     }
 
@@ -475,10 +537,15 @@ export class UIController {
                         label: 'Tần suất lũy tiến (%)',
                         data: history,
                         borderColor: '#00d2ff',
-                        borderWidth: 2,
-                        pointRadius: history.length > 50 ? 0 : 3,
+                        borderWidth: 3,
+                        backgroundColor: 'rgba(0, 210, 255, 0.08)',
+                        pointRadius: 0,
+                        pointHoverRadius: 5,
+                        pointHoverBackgroundColor: '#00d2ff',
+                        pointHoverBorderColor: '#fff',
+                        pointHoverBorderWidth: 2,
                         fill: false,
-                        tension: 0.1
+                        tension: 0.15
                     },
                     {
                         label: 'Giới hạn lý thuyết',
@@ -487,8 +554,8 @@ export class UIController {
                             { x: history[history.length - 1].x, y: theoreticalProb }
                         ],
                         borderColor: '#ff007a',
-                        borderWidth: 2,
-                        borderDash: [5, 5],
+                        borderWidth: 3,
+                        borderDash: [6, 4],
                         pointRadius: 0,
                         fill: false
                     }
@@ -497,22 +564,57 @@ export class UIController {
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
+                animation: {
+                    duration: 1000,
+                    easing: 'easeOutQuart'
+                },
+                hover: {
+                    mode: 'nearest',
+                    intersect: false
+                },
                 scales: {
                     x: {
                         type: 'linear',
-                        title: { display: true, text: 'Số lần thử (n)', color: theme.tick },
-                        grid: { color: theme.grid },
-                        ticks: { color: theme.tick }
+                        title: { display: true, text: 'Số lần thử (n)', color: theme.tick, font: { size: 12 } },
+                        grid: {
+                            color: theme.grid,
+                            drawBorder: false
+                        },
+                        ticks: { color: theme.tick, font: { size: 11 } }
                     },
                     y: {
-                        title: { display: true, text: 'Tỉ lệ (%)', color: theme.tick },
-                        grid: { color: theme.grid },
-                        ticks: { color: theme.tick }
+                        title: { display: true, text: 'Tỉ lệ (%)', color: theme.tick, font: { size: 12 } },
+                        grid: {
+                            color: theme.grid,
+                            drawBorder: false
+                        },
+                        ticks: {
+                            color: theme.tick,
+                            font: { size: 11 },
+                            callback: (v) => v.toFixed(1) + '%'
+                        }
                     }
                 },
                 plugins: {
                     legend: {
-                        labels: { color: theme.legend, font: { family: 'Outfit' } }
+                        labels: { color: theme.legend, font: { family: 'Outfit', size: 12 } }
+                    },
+                    tooltip: {
+                        enabled: true,
+                        backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                        titleFont: { weight: '700', size: 13 },
+                        bodyFont: { size: 12 },
+                        padding: 12,
+                        cornerRadius: 10,
+                        callbacks: {
+                            title: (items) => 'n = ' + items[0].parsed.x.toLocaleString(),
+                            label: (context) => {
+                                if (context.datasetIndex === 0) {
+                                    return `  Tần suất: ${context.parsed.y.toFixed(3)}%`;
+                                }
+                                return `  Lý thuyết: ${context.parsed.y.toFixed(3)}%`;
+                            }
+                        }
                     }
                 }
             }

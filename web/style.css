@@ -1,6 +1,6 @@
 :root {
     /* Background */
-    --dot-color: rgba(59, 130, 246, 0.25);
+    --dot-color: rgba(29, 30, 32, 0.25);
     --spotlight-color: rgba(59, 130, 246, 0.15);
 
     /* Brilliant.org style tokens (Option B: white canvas + bordered cards) */

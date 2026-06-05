@@ -11,7 +11,6 @@ export class UIController {
             desc: document.getElementById('main-description'),
             nInput: document.getElementById('numTrials'),
             runBtn: document.getElementById('runBtn'),
-            statusIcon: document.getElementById('status-icon'),
             tableHead: document.getElementById('table-head'),
             tableBody: document.getElementById('table-body'),
             aiSection: document.getElementById('aiSection'),
@@ -22,7 +21,6 @@ export class UIController {
     showWelcome() {
         this.elements.title.textContent = '🎲 Graph4Prob — Mô phỏng Xác suất';
         this.elements.desc.textContent = 'Chọn một kiểu mô phỏng từ menu bên dưới để bắt đầu khám phá.';
-        this.elements.statusIcon.textContent = '🎯';
         document.getElementById('dynamic-inputs').innerHTML = '';
     }
 
@@ -190,10 +188,29 @@ export class UIController {
         const theoreticalData = results.map(r => r.theoreticalProb);
         const theme = this.getThemeColors();
 
+        // Helper: chuyển hex → rgba, giữ nguyên HSL/RGB (dùng cho Galton)
+        const toBarBackground = (color, alpha) => {
+            if (!color) return `rgba(0, 210, 255, ${alpha})`;
+            if (color.startsWith('#')) {
+                const r = parseInt(color.slice(1, 3), 16);
+                const g = parseInt(color.slice(3, 5), 16);
+                const b = parseInt(color.slice(5, 7), 16);
+                return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+            }
+            // HSL/RGB — Chart.js chấp nhận trực tiếp
+            return color;
+        };
+
+        // Mỗi cột lấy màu riêng từ results[i].color (giống bảng chi tiết)
+        const barColors = results.map(r => toBarBackground(r.color, 0.65));
+        const barBorderColors = results.map(r => r.color || '#00d2ff');
+
         if (this.chart) {
             // Incremental update — animate bars growing
             this.chart.data.labels = labels;
             this.chart.data.datasets[0].data = empiricalData;
+            this.chart.data.datasets[0].backgroundColor = barColors;
+            this.chart.data.datasets[0].borderColor = barBorderColors;
             this.chart.data.datasets[1].data = theoreticalData;
             this.chart.update('none');
             return;
@@ -207,8 +224,8 @@ export class UIController {
                     {
                         label: 'Thực nghiệm (%)',
                         data: empiricalData,
-                        backgroundColor: 'rgba(0, 210, 255, 0.6)',
-                        borderColor: '#00d2ff',
+                        backgroundColor: barColors,
+                        borderColor: barBorderColors,
                         borderWidth: 1,
                         borderRadius: 8,
                         order: 2
@@ -418,11 +435,9 @@ export class UIController {
         if (isLoading) {
             this.elements.runBtn.disabled = true;
             this.elements.runBtn.textContent = 'Đang tính toán...';
-            this.elements.statusIcon.classList.add('rolling');
         } else {
             this.elements.runBtn.disabled = false;
             this.elements.runBtn.textContent = '▶ Bắt đầu mô phỏng';
-            this.elements.statusIcon.classList.remove('rolling');
         }
     }
 }

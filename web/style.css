@@ -223,6 +223,7 @@ body {
     height: 36px;
     width: auto;
     display: block;
+    border-radius: 8px;
     transition: transform 0.3s ease;
 }
 

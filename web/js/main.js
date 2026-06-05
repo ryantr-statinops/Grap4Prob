@@ -28,6 +28,12 @@ document.addEventListener('DOMContentLoaded', () => {
     initTheme();
     document.getElementById('settingsBtn').addEventListener('click', toggleTheme);
 
+    // ===== Spotlight: vệt sáng theo chuột =====
+    window.addEventListener('mousemove', (e) => {
+        document.documentElement.style.setProperty('--mouse-x', e.clientX + 'px');
+        document.documentElement.style.setProperty('--mouse-y', e.clientY + 'px');
+    });
+
     // ===== Initial State =====
     ui.showWelcome();
 

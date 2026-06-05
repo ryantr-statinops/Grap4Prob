@@ -1,4 +1,8 @@
 :root {
+    /* Background */
+    --dot-color: rgba(59, 130, 246, 0.12);
+    --spotlight-color: rgba(59, 130, 246, 0.08);
+
     /* Brilliant.org style tokens (Option B: white canvas + bordered cards) */
     --primary: #2563EB; /* Brand Blue 600 */
     --primary-glow: rgba(37, 99, 235, 0.22);
@@ -63,6 +67,9 @@
 
 /* ===== Dark Mode ===== */
 [data-theme="dark"] {
+    --dot-color: rgba(59, 130, 246, 0.18);
+    --spotlight-color: rgba(59, 130, 246, 0.12);
+
     --primary: #3B82F6; /* Blue 500 — brighter on dark */
     --primary-glow: rgba(59, 130, 246, 0.3);
     --secondary: #60A5FA;
@@ -93,6 +100,28 @@
     --badge-text: #F1F5F9;
 
     --table-row-border: rgba(51, 65, 85, 1);
+}
+
+/* ===== Background Dot Pattern & Spotlight ===== */
+.dot-pattern {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-image: radial-gradient(var(--dot-color) 1px, transparent 1px);
+    background-size: 24px 24px;
+}
+
+.spotlight {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: radial-gradient(
+        350px circle at var(--mouse-x, 0px) var(--mouse-y, 0px),
+        var(--spotlight-color),
+        transparent 80%
+    );
 }
 
 /* Smooth theme transitions */

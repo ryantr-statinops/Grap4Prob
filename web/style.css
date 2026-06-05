@@ -446,6 +446,9 @@ input[type="number"]::placeholder {
 }
 
 button.btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     background: var(--primary);
     color: #FFFFFF;
     border: 1px solid rgba(37, 99, 235, 0.4);
@@ -617,8 +620,13 @@ i[data-lucide] {
     display: inline-block;
     width: 1.1em;
     height: 1.1em;
-    vertical-align: middle;
+    vertical-align: -0.1em;
     stroke-width: 2;
+}
+
+/* In flex containers, icons align naturally without vertical-align */
+button i[data-lucide] {
+    vertical-align: middle;
 }
 
 @keyframes spin {

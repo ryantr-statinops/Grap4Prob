@@ -216,8 +216,10 @@ export class UIController {
     }
 
     hideSkeleton() {
+        const wasVisible = this.elements.skeletonContainer.style.display !== 'none';
         this.elements.skeletonContainer.style.display = 'none';
-        // Trigger entrance animation for result cards
+        // Only animate on first transition from skeleton to results
+        if (!wasVisible) return;
         const cards = [
             document.getElementById('chartCard'),
             document.getElementById('convergenceCard')

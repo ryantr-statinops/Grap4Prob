@@ -27,7 +27,6 @@
             </div>
         </div>
     </nav>
-
     <div class="app-container fade-in">
         <header class="top-bar glass">
             <div class="bottom-row">
@@ -47,7 +46,7 @@
                     <div class="tooltip-popup" id="simTooltipPopup">
                         <div class="tooltip-arrow"></div>
                         <strong id="tooltipTitle">Xúc xắc (Dice)</strong>
-                        <p id="tooltipDesc">Mô phỏng tung xúc xắc 6 mặt. Mỗi mặt có xác suất 1/6 ≈ 16.67%.</p>
+                        <p id="tooltipDesc">Mô phỏng tung xúc xắc 6 mặt. Mỗi mặt có xác suất 1/6 khoảng 16.67%.</p>
                         <p class="tooltip-formula" id="tooltipFormula">P = 1/6</p>
                     </div>
                 </div>
@@ -71,7 +70,6 @@
                 <span class="progress-text" id="progressText">0%</span>
             </div>
         </header>
-
         <main>
             <section class="empty-state" id="emptyState">
                 <div class="empty-illustration">
@@ -85,12 +83,10 @@
                     <div class="empty-feature"><span>🧠</span><span>AI phân tích</span></div>
                 </div>
             </section>
-
             <section class="hero-section glass" id="heroSection" style="display: none;">
                 <h2 id="main-title">Mô phỏng Xúc xắc</h2>
                 <p id="main-description">Luật số lớn phát biểu rằng khi số lần thử nghiệm tăng lên, tần suất thực nghiệm sẽ tiến dần đến xác suất lý thuyết.</p>
             </section>
-
             <div class="summary-grid" id="summaryGrid" style="display: none;">
                 <div class="summary-card glass">
                     <div class="summary-icon" style="background: rgba(37, 99, 235, 0.1);">📊</div>
@@ -121,7 +117,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="skeleton-container" id="skeletonContainer" style="display: none;">
                 <div class="stats-grid">
                     <section class="chart-card glass">
@@ -138,9 +133,48 @@
                     <div class="skeleton-chart-short shimmer"></div>
                 </section>
             </div>
-
             <div class="stats-grid" id="chartCard" style="display: none;">
                 <section class="chart-card glass">
                     <div class="card-header">
                         <h3 class="card-title">Phân phối tần suất</h3>
-                        <div
+                        <div class="card-actions">
+                            <button class="export-btn" id="exportChartPng" title="Xuất biểu đồ PNG">📷 PNG</button>
+                        </div>
+                    </div>
+                    <div class="chart-wrap">
+                        <canvas id="mainChart"></canvas>
+                    </div>
+                </section>
+                <section class="table-card glass">
+                    <div class="card-header">
+                        <h3 class="card-title">Kết quả chi tiết</h3>
+                        <div class="card-actions">
+                            <button class="export-btn" id="exportTableCsv" title="Xuất bảng CSV">📄 CSV</button>
+                        </div>
+                    </div>
+                    <div class="table-scroll">
+                        <table id="resultTable">
+                            <thead><tr id="table-head"></tr></thead>
+                            <tbody id="table-body"></tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+            <section id="convergenceCard" class="chart-card chart-card--short glass" style="display: none;">
+                <h3 class="card-title">Đường hội tụ lũy tiến</h3>
+                <div class="chart-wrap">
+                    <canvas id="convergenceChart"></canvas>
+                </div>
+            </section>
+            <section id="aiSection" class="ai-panel glass" style="display: none;">
+                <div class="ai-badge">🧠 NHẬN XÉT</div>
+                <div id="aiContent"></div>
+            </section>
+        </main>
+    </div>
+    <div style="display: none;">
+        <canvas id="exportCanvas"></canvas>
+    </div>
+    <script type="module" src="js/main.js?v=3.5"></script>
+</body>
+</html>

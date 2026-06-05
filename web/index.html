@@ -4,25 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Graph4Prob | Visualizing & Simulating Probability</title>
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Navigation Bar -->
     <nav class="navbar">
         <div class="nav-inner">
             <div class="nav-brand">
-                <span class="nav-logo">🎲</span> <!-- thay ảnh logo vào đây-->
-                <span class="nav-title"> Graph4Prob | Easy understand Probability Simulator</span>
+                <span class="nav-logo">🎲</span>
+                <span class="nav-title">Graph4Prob</span>
+                <span class="nav-subtitle">Probability Simulator</span>
             </div>
             <div class="nav-actions">
                 <button class="nav-settings-btn" id="settingsBtn" title="Chuyển chế độ tối/sáng">
-                    <!-- Moon icon (light mode) / Sun icon (dark mode) — swapped by JS -->
                     <svg id="themeIcon" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
                     </svg>
@@ -32,7 +29,6 @@
     </nav>
 
     <div class="app-container fade-in">
-        <!-- Top Bar -->
         <header class="top-bar glass">
             <div class="bottom-row">
                 <div class="module-selector-wrapper">
@@ -47,67 +43,104 @@
                         <option value="buffon">🪡 Kim Buffon (Pi)</option>
                         <option value="galton">🛝 Bàn Galton (CLT)</option>
                     </select>
+                    <button class="tooltip-trigger" id="simTooltip" title="Tìm hiểu thêm">ⓘ</button>
+                    <div class="tooltip-popup" id="simTooltipPopup">
+                        <div class="tooltip-arrow"></div>
+                        <strong id="tooltipTitle">Xúc xắc (Dice)</strong>
+                        <p id="tooltipDesc">Mô phỏng tung xúc xắc 6 mặt. Mỗi mặt có xác suất 1/6 ≈ 16.67%.</p>
+                        <p class="tooltip-formula" id="tooltipFormula">P = 1/6</p>
+                    </div>
                 </div>
                 <div class="input-group">
                     <label for="numTrials" class="input-label">Số lần thử (n)</label>
-                    <input type="number" id="numTrials" placeholder="Hãy nhập số lần thử" min="1" max="1000000">
+                    <input type="number" id="numTrials" placeholder="Nhập số lần thử" min="1" max="1000000">
+                    <div class="preset-group" id="presetGroup">
+                        <button class="preset-btn" data-value="100">100</button>
+                        <button class="preset-btn" data-value="1000">1K</button>
+                        <button class="preset-btn" data-value="10000">10K</button>
+                        <button class="preset-btn" data-value="100000">100K</button>
+                    </div>
                 </div>
                 <div id="dynamic-inputs" class="dynamic-inputs"></div>
-                <button id="runBtn" class="btn-primary">▶ Bắt đầu mô phỏng                </button>
+                <button id="runBtn" class="btn-primary">▶ Bắt đầu mô phỏng</button>
+            </div>
+            <div class="progress-container" id="progressContainer" style="display: none;">
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" id="progressFill"></div>
+                </div>
+                <span class="progress-text" id="progressText">0%</span>
             </div>
         </header>
 
-        <!-- Main Content -->
         <main>
-            <section class="hero-section glass">
+            <section class="empty-state" id="emptyState">
+                <div class="empty-illustration">
+                    <span class="empty-icon">📊</span>
+                </div>
+                <h2 class="empty-title">Chào mừng đến với Graph4Prob</h2>
+                <p class="empty-desc">Chọn một kiểu mô phỏng từ menu bên trên, nhập số lần thử, và nhấn <strong>▶ Bắt đầu mô phỏng</strong> để khám phá Luật số lớn!</p>
+                <div class="empty-features">
+                    <div class="empty-feature"><span>🎲</span><span>8 kiểu mô phỏng</span></div>
+                    <div class="empty-feature"><span>📈</span><span>Biểu đồ trực quan</span></div>
+                    <div class="empty-feature"><span>🧠</span><span>AI phân tích</span></div>
+                </div>
+            </section>
+
+            <section class="hero-section glass" id="heroSection" style="display: none;">
                 <h2 id="main-title">Mô phỏng Xúc xắc</h2>
                 <p id="main-description">Luật số lớn phát biểu rằng khi số lần thử nghiệm tăng lên, tần suất thực nghiệm sẽ tiến dần đến xác suất lý thuyết.</p>
             </section>
 
-
-            <div class="stats-grid" id="chartCard" style="display: none;">
-                <section class="chart-card glass">
-                    <h3 class="card-title">Phân phối tần suất hiện tại</h3>
-                    <div class="chart-wrap">
-                        <canvas id="mainChart"></canvas>
+            <div class="summary-grid" id="summaryGrid" style="display: none;">
+                <div class="summary-card glass">
+                    <div class="summary-icon" style="background: rgba(37, 99, 235, 0.1);">📊</div>
+                    <div class="summary-info">
+                        <span class="summary-value" id="summaryTrials">0</span>
+                        <span class="summary-label">Tổng số thử</span>
                     </div>
-                </section>
-
-                <section class="table-card glass">
-                    <h3 class="card-title">Kết quả chi tiết</h3>
-                    <div class="table-scroll">
-                        <table id="resultTable">
-                            <thead>
-                                <tr id="table-head">
-                                    <!-- Dynamic -->
-                                </tr>
-                            </thead>
-                            <tbody id="table-body">
-                                <!-- Dynamic -->
-                            </tbody>
-                        </table>
+                </div>
+                <div class="summary-card glass">
+                    <div class="summary-icon" style="background: rgba(34, 197, 94, 0.1);">🎯</div>
+                    <div class="summary-info">
+                        <span class="summary-value" id="summaryError">0%</span>
+                        <span class="summary-label">Sai số TB</span>
                     </div>
+                </div>
+                <div class="summary-card glass">
+                    <div class="summary-icon" style="background: rgba(168, 85, 247, 0.1);">📈</div>
+                    <div class="summary-info">
+                        <span class="summary-value" id="summaryConvergence">--</span>
+                        <span class="summary-label">Hội tụ</span>
+                    </div>
+                </div>
+                <div class="summary-card glass">
+                    <div class="summary-icon" style="background: rgba(245, 158, 11, 0.1);">⚡</div>
+                    <div class="summary-info">
+                        <span class="summary-value" id="summaryBest">--</span>
+                        <span class="summary-label">Kết quả tốt nhất</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="skeleton-container" id="skeletonContainer" style="display: none;">
+                <div class="stats-grid">
+                    <section class="chart-card glass">
+                        <div class="skeleton-title shimmer"></div>
+                        <div class="skeleton-chart shimmer"></div>
+                    </section>
+                    <section class="table-card glass">
+                        <div class="skeleton-title shimmer"></div>
+                        <div class="skeleton-table shimmer"></div>
+                    </section>
+                </div>
+                <section class="chart-card chart-card--short glass">
+                    <div class="skeleton-title shimmer"></div>
+                    <div class="skeleton-chart-short shimmer"></div>
                 </section>
             </div>
 
-            <section id="convergenceCard" class="chart-card chart-card--short glass" style="display: none;">
-                <h3 class="card-title">Đường hội tụ lũy tiến (Cumulative Average)</h3>
-                <div class="chart-wrap">
-                    <canvas id="convergenceChart"></canvas>
-                </div>
-            </section>
-
-
-            <section id="aiSection" class="ai-panel glass" style="display: none;">
-                <div class="ai-badge">NHẬN XÉT</div>
-                <div id="aiContent">
-                    <!-- Dynamic -->
-                </div>
-            </section>
-        </main>
-    </div>
-
-    <!-- Scripts -->
-    <script type="module" src="js/main.js?v=3.3"></script>
-</body>
-</html>
+            <div class="stats-grid" id="chartCard" style="display: none;">
+                <section class="chart-card glass">
+                    <div class="card-header">
+                        <h3 class="card-title">Phân phối tần suất</h3>
+                        <div

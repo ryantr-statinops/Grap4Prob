@@ -14,17 +14,85 @@ export class UIController {
             tableHead: document.getElementById('table-head'),
             tableBody: document.getElementById('table-body'),
             aiSection: document.getElementById('aiSection'),
-            aiContent: document.getElementById('aiContent')
+            aiContent: document.getElementById('aiContent'),
+            emptyState: document.getElementById('emptyState'),
+            heroSection: document.getElementById('heroSection'),
+            summaryGrid: document.getElementById('summaryGrid'),
+            skeletonContainer: document.getElementById('skeletonContainer'),
+            progressContainer: document.getElementById('progressContainer'),
+            progressFill: document.getElementById('progressFill'),
+            progressText: document.getElementById('progressText'),
+            exportChartPng: document.getElementById('exportChartPng'),
+            exportTableCsv: document.getElementById('exportTableCsv'),
+            tooltipTitle: document.getElementById('tooltipTitle'),
+            tooltipDesc: document.getElementById('tooltipDesc'),
+            tooltipFormula: document.getElementById('tooltipFormula')
         };
+
+        // Tooltip data for each simulation type
+        this.tooltipData = {
+            dice: {
+                title: '🎲 Xúc xắc (Dice)',
+                desc: 'Mô phỏng tung một con xúc xắc 6 mặt cân đối. Luật số lớn: tần suất mỗi mặt sẽ hội tụ về 1/6 ≈ 16.67% khi số lần tung tăng lên.',
+                formula: 'P(mỗi mặt) = 1/6 ≈ 16.67%'
+            },
+            coin: {
+                title: '🪙 Đồng xu (Coin)',
+                desc: 'Mô phỏng tung một đồng xu cân đối. Khi tung đủ nhiều lần, tỉ lệ mặt Ngửa và mặt Sấp sẽ tiến dần đến 50-50.',
+                formula: 'P(Ngửa) = P(Sấp) = 1/2 = 50%'
+            },
+            card: {
+                title: '🃏 Lá bài (Cards)',
+                desc: 'Rút ngẫu nhiên một lá từ bộ bài 52 lá tiêu chuẩn. Mỗi chất (Bích, Cơ, Rô, Chuồn) có 13 lá, xác suất rút được mỗi chất là 1/4.',
+                formula: 'P(mỗi chất) = 13/52 = 1/4 = 25%'
+            },
+            urn: {
+                title: '🎱 Rút bi (Urn Problem)',
+                desc: 'Rút bi từ một túi chứa nhiều màu khác nhau. Có thể chọn chế độ "có hoàn trả" (xác suất không đổi) hoặc "không hoàn trả" (xác suất thay đổi).',
+                formula: 'P(màu X) = số bi màu X / tổng số bi'
+            },
+            monty: {
+                title: '🚪 Nghịch lý Monty Hall',
+                desc: 'Bạn chọn 1 trong 3 cửa, host mở 1 cửa toé. Chiến thuật tối ưu: LUÔN ĐỔI cửa — xác suất thắng tăng từ 33.33% lên 66.67%!',
+                formula: 'P(thắng khi ĐỔI) = 2/3 ≈ 66.67%'
+            },
+            birthday: {
+                title: '🎂 Nghịch lý Ngày sinh (Birthday Paradox)',
+                desc: 'Trong một nhóm chỉ 23 người, xác suất có ít nhất 2 người trùng ngày sinh đã > 50%. Với 70 người, xác suất > 99.9%!',
+                formula: 'P(có trùng) = 1 - 365! / ((365-n)! × 365ⁿ)'
+            },
+            buffon: {
+                title: '🪡 Kim Buffon (Ước lượng Pi)',
+                desc: 'Thả một cây kim có độ dài bằng khoảng cách giữa các đường kẻ song song. Xác suất kim chạm vạch là 2/π ≈ 63.66% — dùng để ước lượng số Pi!',
+                formula: 'P(chạm vạch) = 2/π ≈ 63.66% → π ≈ 2n / hits'
+            },
+            galton: {
+                title: '🛝 Bàn Galton (Định lý Giới hạn Trung tâm)',
+                desc: 'Các viên bi rơi qua các hàng đinh ngẫu nhiên. Kết quả hội tụ về phân phối Chuẩn (hình chuông) — minh hoạ cho Định lý Giới hạn Trung tâm.',
+                formula: 'P(ô k) = C(n,k) × (1/2)ⁿ  →  Xấp xỉ Chuẩn'
+            }
+        };
+
+        this.setupExportListeners();
+        this.setupTooltipListeners();
     }
 
     showWelcome() {
-        this.elements.title.textContent = '🎲 Graph4Prob — Mô phỏng Xác suất';
-        this.elements.desc.textContent = 'Chọn một kiểu mô phỏng từ menu bên dưới để bắt đầu khám phá.';
+        this.elements.emptyState.style.display = '';
+        this.elements.heroSection.style.display = 'none';
+        this.elements.summaryGrid.style.display = 'none';
+        this.elements.skeletonContainer.style.display = 'none';
+        document.getElementById('chartCard').style.display = 'none';
+        document.getElementById('convergenceCard').style.display = 'none';
+        document.getElementById('aiSection').style.display = 'none';
         document.getElementById('dynamic-inputs').innerHTML = '';
     }
 
     updateHeader(type) {
+        // Hide empty state, show hero
+        this.elements.emptyState.style.display = 'none';
+        this.elements.heroSection.style.display = '';
+
         if (type === 'dice') {
             this.elements.title.textContent = 'Mô phỏng Xúc xắc';
             this.elements.desc.textContent = 'Xác suất lý thuyết cho mỗi mặt của xúc xắc 6 mặt là 1/6 (≈ 16.67%).';
@@ -63,7 +131,6 @@ export class UIController {
             return;
         }
 
-        // Clear dynamic inputs for simple simulations
         document.getElementById('dynamic-inputs').innerHTML = '';
     }
 
@@ -128,8 +195,128 @@ export class UIController {
         }
     }
 
+    // ===== Skeleton =====
+    showSkeleton() {
+        this.elements.skeletonContainer.style.display = '';
+        document.getElementById('chartCard').style.display = 'none';
+        document.getElementById('convergenceCard').style.display = 'none';
+        document.getElementById('aiSection').style.display = 'none';
+    }
+
+    hideSkeleton() {
+        this.elements.skeletonContainer.style.display = 'none';
+    }
+
+    // ===== Progress =====
+    showProgress() {
+        this.elements.progressContainer.style.display = 'flex';
+        this.updateProgress(0);
+    }
+
+    updateProgress(percent) {
+        const pct = Math.min(100, Math.max(0, percent));
+        this.elements.progressFill.style.width = pct + '%';
+        this.elements.progressText.textContent = pct.toFixed(0) + '%';
+    }
+
+    hideProgress() {
+        this.elements.progressContainer.style.display = 'none';
+        this.elements.progressFill.style.width = '0%';
+        this.elements.progressText.textContent = '0%';
+    }
+
+    // ===== Summary Cards =====
+    renderSummaryCards(n, results) {
+        this.elements.summaryGrid.style.display = 'grid';
+        document.getElementById('summaryTrials').textContent = n.toLocaleString();
+
+        const avgError = results.reduce((sum, r) => sum + r.error, 0) / results.length;
+        document.getElementById('summaryError').textContent = avgError.toFixed(2) + '%';
+
+        // Find best match (lowest error)
+        const best = results.reduce((min, r) => r.error < min.error ? r : min, results[0]);
+        document.getElementById('summaryBest').textContent = best.label.split(' ')[0] + ' (' + best.error.toFixed(2) + '%)';
+
+        // Convergence status
+        const converged = avgError < 1;
+        const convergenceEl = document.getElementById('summaryConvergence');
+        if (n < 500) {
+            convergenceEl.textContent = 'Đang chạy...';
+            convergenceEl.style.color = 'var(--text-muted)';
+        } else if (converged) {
+            convergenceEl.textContent = '✅ Đã hội tụ';
+            convergenceEl.style.color = '#22c55e';
+        } else {
+            convergenceEl.textContent = '⚠️ Gần hội tụ';
+            convergenceEl.style.color = '#eab308';
+        }
+    }
+
+    // ===== Tooltip =====
+    setupTooltipListeners() {
+        const select = document.getElementById('moduleSelect');
+        select.addEventListener('change', () => this.updateTooltip(select.value));
+        // Initial update
+        if (select.value) this.updateTooltip(select.value);
+    }
+
+    updateTooltip(type) {
+        const data = this.tooltipData[type];
+        if (!data) return;
+        this.elements.tooltipTitle.textContent = data.title;
+        this.elements.tooltipDesc.textContent = data.desc;
+        this.elements.tooltipFormula.textContent = data.formula;
+    }
+
+    // ===== Export =====
+    setupExportListeners() {
+        if (this.elements.exportChartPng) {
+            this.elements.exportChartPng.addEventListener('click', () => this.exportChartPng());
+        }
+        if (this.elements.exportTableCsv) {
+            this.elements.exportTableCsv.addEventListener('click', () => this.exportTableCsv());
+        }
+    }
+
+    exportChartPng() {
+        if (!this.chart) return;
+        const link = document.createElement('a');
+        link.download = 'graph4prob-chart.png';
+        link.href = this.chart.toBase64Image('image/png', 1);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    exportTableCsv() {
+        const rows = [];
+        const headerCells = this.elements.tableHead.querySelectorAll('th');
+        rows.push(Array.from(headerCells).map(th => th.textContent).join(','));
+
+        const bodyRows = this.elements.tableBody.querySelectorAll('tr');
+        bodyRows.forEach(tr => {
+            const cells = tr.querySelectorAll('td');
+            const row = Array.from(cells).map(td => {
+                let text = td.textContent.trim();
+                if (text.includes(',')) text = '"' + text + '"';
+                return text;
+            }).join(',');
+            rows.push(row);
+        });
+
+        const csv = rows.join('\n');
+        const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.download = 'graph4prob-results.csv';
+        link.href = URL.createObjectURL(blob);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(link.href);
+    }
+
+    // ===== Table =====
     renderTable(results) {
-        // Clear previous
         this.elements.tableHead.innerHTML = `
             <th>Kết quả</th>
             <th>Số lần (n)</th>
@@ -140,7 +327,6 @@ export class UIController {
 
         this.elements.tableBody.innerHTML = results.map(res => {
             const errorColor = res.error < 0.1 ? '#22c55e' : (res.error < 1 ? '#eab308' : '#ef4444');
-
             return `
                 <tr>
                     <td><span class="badge" style="background: ${res.color || 'rgba(0,210,255,0.2)'}">${res.label}</span></td>
@@ -155,6 +341,7 @@ export class UIController {
         }).join('');
     }
 
+    // ===== Theme =====
     getThemeColors() {
         const style = getComputedStyle(document.documentElement);
         return {
@@ -185,6 +372,7 @@ export class UIController {
         updateOptions(this.convergenceChart);
     }
 
+    // ===== Chart =====
     renderChart(results) {
         const ctx = document.getElementById('mainChart').getContext('2d');
         const labels = results.map(r => r.label);
@@ -192,7 +380,6 @@ export class UIController {
         const theoreticalData = results.map(r => r.theoreticalProb);
         const theme = this.getThemeColors();
 
-        // Helper: chuyển hex → rgba, giữ nguyên HSL/RGB (dùng cho Galton)
         const toBarBackground = (color, alpha) => {
             if (!color) return `rgba(0, 210, 255, ${alpha})`;
             if (color.startsWith('#')) {
@@ -201,16 +388,13 @@ export class UIController {
                 const b = parseInt(color.slice(5, 7), 16);
                 return `rgba(${r}, ${g}, ${b}, ${alpha})`;
             }
-            // HSL/RGB — Chart.js chấp nhận trực tiếp
             return color;
         };
 
-        // Mỗi cột lấy màu riêng từ results[i].color (giống bảng chi tiết)
         const barColors = results.map(r => toBarBackground(r.color, 0.65));
         const barBorderColors = results.map(r => r.color || '#00d2ff');
 
         if (this.chart) {
-            // Incremental update — animate bars growing
             this.chart.data.labels = labels;
             this.chart.data.datasets[0].data = empiricalData;
             this.chart.data.datasets[0].backgroundColor = barColors;
@@ -269,12 +453,12 @@ export class UIController {
         });
     }
 
+    // ===== Convergence Chart =====
     renderConvergenceChart(history, theoreticalProb) {
         const ctx = document.getElementById('convergenceChart').getContext('2d');
         const theme = this.getThemeColors();
 
         if (this.convergenceChart) {
-            // Incremental update — draw more points as simulation progresses
             this.convergenceChart.data.datasets[0].data = history;
             this.convergenceChart.data.datasets[1].data = [
                 { x: 0, y: theoreticalProb },
@@ -336,6 +520,7 @@ export class UIController {
         });
     }
 
+    // ===== AI Insights =====
     showAIInsights(n, results) {
         this.elements.aiSection.style.display = 'block';
         let insight = `<p style="margin-bottom: 10px;">Với số mẫu <strong>n = ${n.toLocaleString()}</strong>:</p>`;
@@ -359,65 +544,27 @@ export class UIController {
                 <p style="font-weight: 600; color: #ff007a;">📍 Ước lượng số π ≈ ${piEstimate.toFixed(6)}</p>
                 <small>Công thức: π ≈ 2n / hits (khi L = D)</small>
             </div>`;
-        } else if (this.elements.title.textContent.includes('Galton')) {
-            insight += `<div style="margin-top: 15px; padding: 10px; background: rgba(34,197,94,0.1); border-radius: 8px; border-left: 4px solid #22c55e;">
-                <p style="font-weight: 600; color: #22c55e;">📈 Định lý Giới hạn Trung tâm (CLT)</p>
-                <small>Tổng của nhiều biến ngẫu nhiên độc lập sẽ hội tụ về Phân phối Chuẩn (Hình chuông).</small>
-            </div>`;
         }
 
         this.elements.aiContent.innerHTML = insight;
     }
 
-    renderBuffonVis(n) {
-        const canvas = this.elements.canvas;
-        const ctx = canvas.getContext('2d');
-        const width = canvas.offsetWidth;
-        const height = canvas.offsetHeight;
-        canvas.width = width;
-        canvas.height = height;
-
-        ctx.clearRect(0, 0, width, height);
-        
-        // Draw Lines (vertical grid lines)
-        const spacing = 60;
-        ctx.strokeStyle = 'rgba(15, 23, 42, 0.12)';
-        ctx.lineWidth = 1.5;
-        for (let x = 0; x < width; x += spacing) {
-            ctx.beginPath();
-            ctx.moveTo(x, 0);
-            ctx.lineTo(x, height);
-            ctx.stroke();
-        }
-
-        // Draw Needles (only show 200 for performance and clarity)
-        const displayLimit = Math.min(n, 200);
-        for (let i = 0; i < displayLimit; i++) {
-            const x = Math.random() * width;
-            const y = Math.random() * height;
-            const angle = Math.random() * Math.PI;
-            const length = spacing; // L = D
-
-            const x2 = x + Math.cos(angle) * length;
-            const y2 = y + Math.sin(angle) * length;
-
-            // Check if touches a line
-            const hit = Math.floor(x / spacing) !== Math.floor(x2 / spacing);
-
-            ctx.beginPath();
-            ctx.moveTo(x, y);
-            ctx.lineTo(x2, y2);
-            ctx.strokeStyle = hit ? '#ff007a' : 'rgba(0, 210, 255, 0.5)';
-            ctx.lineWidth = 1.5;
-            ctx.stroke();
+    // ===== Loading =====
+    setLoading(isLoading) {
+        if (isLoading) {
+            this.elements.runBtn.disabled = true;
+            this.elements.runBtn.textContent = '⏳ Đang mô phỏng...';
+        } else {
+            this.elements.runBtn.disabled = false;
+            this.elements.runBtn.textContent = '▶ Bắt đầu mô phỏng';
         }
     }
 
+    // ===== Theme Icon =====
     setThemeIcon(theme) {
         const icon = document.getElementById('themeIcon');
         if (!icon) return;
         if (theme === 'dark') {
-            // Sun icon for dark mode (switch to light)
             icon.innerHTML = `
                 <circle cx="12" cy="12" r="5"/>
                 <line x1="12" y1="1" x2="12" y2="3"/>
@@ -430,18 +577,7 @@ export class UIController {
                 <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
             `;
         } else {
-            // Moon icon for light mode (switch to dark)
             icon.innerHTML = `<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>`;
-        }
-    }
-
-    setLoading(isLoading) {
-        if (isLoading) {
-            this.elements.runBtn.disabled = true;
-            this.elements.runBtn.textContent = 'Đang tính toán...';
-        } else {
-            this.elements.runBtn.disabled = false;
-            this.elements.runBtn.textContent = '▶ Bắt đầu mô phỏng';
         }
     }
 }

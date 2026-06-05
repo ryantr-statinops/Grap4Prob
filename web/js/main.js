@@ -1,8 +1,8 @@
 /**
  * Main Entry Point for TTK-AI
  */
-import { SimulationEngine, SIM_TYPES } from './simulation.js?v=3.3';
-import { UIController } from './ui.js?v=3.3';
+import { SimulationEngine, SIM_TYPES } from './simulation.js?v=3.5';
+import { UIController } from './ui.js?v=3.5';
 
 document.addEventListener('DOMContentLoaded', () => {
     const ui = new UIController();
@@ -14,7 +14,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const saved = localStorage.getItem('graph4prob-theme') || 'light';
         document.documentElement.setAttribute('data-theme', saved);
         ui.setThemeIcon(saved);
-        // Update chart colors after charts are created (lazy: called after render)
     }
 
     function toggleTheme() {
@@ -23,18 +22,26 @@ document.addEventListener('DOMContentLoaded', () => {
         document.documentElement.setAttribute('data-theme', next);
         localStorage.setItem('graph4prob-theme', next);
         ui.setThemeIcon(next);
-        // Update existing chart colors to match new theme
         ui.updateChartTheme();
     }
 
     initTheme();
-
     document.getElementById('settingsBtn').addEventListener('click', toggleTheme);
 
-    // Initial State — show welcome, no module selected
+    // ===== Initial State =====
     ui.showWelcome();
 
-    // Module Switcher — Dropdown
+    // ===== Preset Buttons =====
+    document.getElementById('presetGroup').addEventListener('click', (e) => {
+        const btn = e.target.closest('.preset-btn');
+        if (!btn) return;
+        const value = parseInt(btn.dataset.value);
+        if (!isNaN(value)) {
+            ui.elements.nInput.value = value;
+        }
+    });
+
+    // ===== Module Switcher =====
     const switchMode = (type) => {
         currentType = type;
         engine = new SimulationEngine(type);
@@ -44,6 +51,9 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('aiSection').style.display = 'none';
         document.getElementById('chartCard').style.display = 'none';
         document.getElementById('convergenceCard').style.display = 'none';
+        ui.hideSkeleton();
+        ui.hideProgress();
+        ui.elements.summaryGrid.style.display = 'none';
         if (ui.chart) {
             ui.chart.destroy();
             ui.chart = null;
@@ -61,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Run Simulation
+    // ===== Run Simulation =====
     ui.elements.runBtn.addEventListener('click', async () => {
         if (!currentType) {
             alert('Vui lòng chọn kiểu mô phỏng trước!');
@@ -74,8 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         let customConfig = null;
-        if (currentType === SIM_TYPES.URN) {
-        } else if (currentType === SIM_TYPES.CARD) {
+        if (currentType === SIM_TYPES.CARD) {
             customConfig = {
                 mode: document.getElementById('cardMode').value
             };
@@ -111,7 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
             };
             engine = new SimulationEngine(currentType, customConfig);
         } else if (currentType === SIM_TYPES.MONTY) {
-            engine = new SimulationEngine(currentType); // Reset config
+            engine = new SimulationEngine(currentType);
         } else if (currentType === SIM_TYPES.BUFFON) {
             engine = new SimulationEngine(currentType);
         } else if (currentType === SIM_TYPES.GALTON) {
@@ -129,33 +138,44 @@ document.addEventListener('DOMContentLoaded', () => {
             theoreticalProb = engine.getIndividualTheoreticalProb(0);
         }
 
+        // ===== Show skeleton + progress =====
+        ui.showSkeleton();
+        ui.showProgress();
         ui.setLoading(true);
 
-        // Hiện chart cards ngay lập tức
+        // Show chart cards skeleton area
         document.getElementById('chartCard').style.display = '';
         document.getElementById('convergenceCard').style.display = '';
 
         try {
             const data = await engine.runProgressive(n, (current, total, counts, history) => {
-                // Tính kết quả trung gian và cập nhật chart + table dần
+                // Update progress bar
+                const pct = (current / total) * 100;
+                ui.updateProgress(pct);
+
                 const intermediateResults = engine.computeResults(counts, current);
+                ui.hideSkeleton();
                 ui.renderChart(intermediateResults);
                 ui.renderTable(intermediateResults);
                 ui.renderConvergenceChart(history, theoreticalProb);
             });
-            
-            // Final render với dữ liệu đầy đủ
+
+            // Final render
+            ui.hideSkeleton();
+            ui.hideProgress();
             ui.renderTable(data.results);
             ui.renderChart(data.results);
             ui.renderConvergenceChart(data.history, theoreticalProb);
+            ui.renderSummaryCards(data.n, data.results);
             ui.showAIInsights(data.n, data.results);
         } catch (error) {
             console.error('Simulation failed:', error);
             alert('Có lỗi xảy ra trong quá trình mô phỏng.');
+            ui.hideSkeleton();
+            ui.hideProgress();
         } finally {
             ui.setLoading(false);
         }
     });
 
 });
-

@@ -33,7 +33,7 @@ truy cập vào đường link sau để sử dụng
 
 ## Công nghệ sử dụng
 
-Dự án được xây dựng với tiêu chí nhẹ, nhanh và hiện đại:
+Dự án được xây dựng với tiêu chí nhẹ, nhanh, tối giản từ công nghệ cho tới giao diện:
 
 - **Frontend**: HTML5 Semantic, CSS3 (Custom Design System, CSS Variables).
 - **Logic**: Vanilla JavaScript (ES6+ Modules).

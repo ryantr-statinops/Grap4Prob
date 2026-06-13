@@ -70,14 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ui.hideSkeleton();
         ui.hideProgress();
         ui.elements.summaryGrid.style.display = 'none';
-        if (ui.chart) {
-            ui.chart.destroy();
-            ui.chart = null;
-        }
-        if (ui.convergenceChart) {
-            ui.convergenceChart.destroy();
-            ui.convergenceChart = null;
-        }
+        ui.chartManager.destroyAll();
         document.getElementById('table-body').innerHTML = '';
     };
 

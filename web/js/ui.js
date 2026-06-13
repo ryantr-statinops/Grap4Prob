@@ -504,7 +504,7 @@ export class UIController {
                 },
                 plugins: {
                     legend: {
-                        labels: { color: theme.legend, font: { family: 'Outfit', size: 12 } }
+                        labels: { color: theme.legend, font: { family: 'Inter', size: 12 } }
                     },
                     tooltip: {
                         enabled: true,
@@ -617,7 +617,7 @@ export class UIController {
                 },
                 plugins: {
                     legend: {
-                        labels: { color: theme.legend, font: { family: 'Outfit', size: 12 } }
+                        labels: { color: theme.legend, font: { family: 'Inter', size: 12 } }
                     },
                     tooltip: {
                         enabled: true,

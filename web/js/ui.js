@@ -78,20 +78,20 @@ export class UIController {
     }
 
     showWelcome() {
-        this.elements.emptyState.style.display = '';
-        this.elements.heroSection.style.display = 'none';
-        this.elements.summaryGrid.style.display = 'none';
-        this.elements.skeletonContainer.style.display = 'none';
-        document.getElementById('chartCard').style.display = 'none';
-        document.getElementById('convergenceCard').style.display = 'none';
-        document.getElementById('aiSection').style.display = 'none';
+        this.elements.emptyState.classList.remove('hidden');
+        this.elements.heroSection.classList.add('hidden');
+        this.elements.summaryGrid.classList.add('hidden');
+        this.elements.skeletonContainer.classList.add('hidden');
+        document.getElementById('chartCard').classList.add('hidden');
+        document.getElementById('convergenceCard').classList.add('hidden');
+        document.getElementById('aiSection').classList.add('hidden');
         document.getElementById('dynamic-inputs').innerHTML = '';
     }
 
     updateHeader(type) {
         // Hide empty state, show hero
-        this.elements.emptyState.style.display = 'none';
-        this.elements.heroSection.style.display = '';
+        this.elements.emptyState.classList.add('hidden');
+        this.elements.heroSection.classList.remove('hidden');
 
         // Trigger entrance animation (reset + replay)
         this.animateHeroSection();
@@ -151,8 +151,8 @@ export class UIController {
         if (type === 'card') {
             container.innerHTML = `
                 <div class="dyn-group">
-                    <label class="dyn-label" style="color: var(--text-muted);">Chế độ rút</label>
-                    <select class="dyn-input" id="cardMode" style="width: 250px; height: 48px; padding: 12px; border-radius: 14px; background: var(--surface); border: 1px solid var(--border); outline: none; cursor: pointer; font-size: 1rem; color: var(--text-main);">
+                    <label class="dyn-label dyn-label--muted">Chế độ rút</label>
+                    <select class="dyn-select" id="cardMode">
                         <option value="with" selected>Có hoàn trả (With Replacement)</option>
                         <option value="without">Không hoàn trả (Without Replacement)</option>
                     </select>
@@ -161,28 +161,28 @@ export class UIController {
         } else if (type === 'urn') {
             container.innerHTML = `
                 <div class="dyn-group">
-                    <label class="dyn-label" style="color: #ef4444;">🔴 Đỏ</label>
+                    <label class="dyn-label dyn-label--red">🔴 Đỏ</label>
                     <input type="number" class="dyn-input" id="urnRed" value="3" min="0" max="100">
                 </div>
                 <div class="dyn-group">
-                    <label class="dyn-label" style="color: #3b82f6;">🔵 Xanh</label>
+                    <label class="dyn-label dyn-label--blue">🔵 Xanh</label>
                     <input type="number" class="dyn-input" id="urnBlue" value="5" min="0" max="100">
                 </div>
                 <div class="dyn-group">
-                    <label class="dyn-label" style="color: #22c55e;">🟢 Lục</label>
+                    <label class="dyn-label dyn-label--green">🟢 Lục</label>
                     <input type="number" class="dyn-input" id="urnGreen" value="2" min="0" max="100">
                 </div>
                 <div class="dyn-group">
-                    <label class="dyn-label" style="color: #eab308;">🟡 Vàng</label>
+                    <label class="dyn-label dyn-label--amber">🟡 Vàng</label>
                     <input type="number" class="dyn-input" id="urnYellow" value="0" min="0" max="100">
                 </div>
                 <div class="dyn-group">
-                    <label class="dyn-label" style="color: #a855f7;">🟣 Tím</label>
+                    <label class="dyn-label dyn-label--purple">🟣 Tím</label>
                     <input type="number" class="dyn-input" id="urnPurple" value="0" min="0" max="100">
                 </div>
                 <div class="dyn-group">
-                    <label class="dyn-label" style="color: var(--text-muted);">Chế độ rút</label>
-                    <select class="dyn-input" id="urnMode" style="width: 250px; height: 48px; padding: 12px; border-radius: 14px; background: var(--surface); border: 1px solid var(--border); outline: none; cursor: pointer; font-size: 1rem; color: var(--text-main);">
+                    <label class="dyn-label dyn-label--muted">Chế độ rút</label>
+                    <select class="dyn-select" id="urnMode">
                         <option value="with" selected>Có hoàn trả (With Replacement)</option>
                         <option value="without">Không hoàn trả (Without Replacement)</option>
                     </select>
@@ -191,15 +191,15 @@ export class UIController {
         } else if (type === 'birthday') {
             container.innerHTML = `
                 <div class="dyn-group">
-                    <label class="dyn-label" style="color: var(--text-muted);">Số người trong nhóm (k)</label>
-                    <input type="number" class="dyn-input" id="bdayGroup" value="23" min="2" max="100" style="width: 120px;">
+                    <label class="dyn-label dyn-label--muted">Số người trong nhóm (k)</label>
+                    <input type="number" class="dyn-input dyn-input--w120" id="bdayGroup" value="23" min="2" max="100">
                 </div>
             `;
         } else if (type === 'galton') {
             container.innerHTML = `
                 <div class="dyn-group">
-                    <label class="dyn-label" style="color: var(--text-muted);">Số hàng đinh (Rows)</label>
-                    <input type="number" class="dyn-input" id="galtonRows" value="10" min="5" max="30" style="width: 100px;">
+                    <label class="dyn-label dyn-label--muted">Số hàng đinh (Rows)</label>
+                    <input type="number" class="dyn-input dyn-input--w100" id="galtonRows" value="10" min="5" max="30">
                 </div>
             `;
         } else {
@@ -209,15 +209,15 @@ export class UIController {
 
     // ===== Skeleton =====
     showSkeleton() {
-        this.elements.skeletonContainer.style.display = '';
-        document.getElementById('chartCard').style.display = 'none';
-        document.getElementById('convergenceCard').style.display = 'none';
-        document.getElementById('aiSection').style.display = 'none';
+        this.elements.skeletonContainer.classList.remove('hidden');
+        document.getElementById('chartCard').classList.add('hidden');
+        document.getElementById('convergenceCard').classList.add('hidden');
+        document.getElementById('aiSection').classList.add('hidden');
     }
 
     hideSkeleton() {
-        const wasVisible = this.elements.skeletonContainer.style.display !== 'none';
-        this.elements.skeletonContainer.style.display = 'none';
+        const wasVisible = !this.elements.skeletonContainer.classList.contains('hidden');
+        this.elements.skeletonContainer.classList.add('hidden');
         // Only animate on first transition from skeleton to results
         if (!wasVisible) return;
         const cards = [
@@ -234,7 +234,7 @@ export class UIController {
 
     // ===== Progress =====
     showProgress() {
-        this.elements.progressContainer.style.display = 'flex';
+        this.elements.progressContainer.classList.remove('hidden');
         this.updateProgress(0);
     }
 
@@ -245,14 +245,14 @@ export class UIController {
     }
 
     hideProgress() {
-        this.elements.progressContainer.style.display = 'none';
+        this.elements.progressContainer.classList.add('hidden');
         this.elements.progressFill.style.width = '0%';
         this.elements.progressText.textContent = '0%';
     }
 
     // ===== Summary Cards =====
     renderSummaryCards(n, results) {
-        this.elements.summaryGrid.style.display = 'grid';
+        this.elements.summaryGrid.classList.remove('hidden');
 
         // Trigger staggered entrance animation
         const cards = this.elements.summaryGrid.querySelectorAll('.summary-card');
@@ -643,7 +643,7 @@ export class UIController {
 
     // ===== AI Insights =====
     showAIInsights(n, results) {
-        this.elements.aiSection.style.display = 'block';
+        this.elements.aiSection.classList.remove('hidden');
         let insight = `<p style="margin-bottom: 10px;">Với số mẫu <strong>n = ${n.toLocaleString()}</strong>:</p>`;
 
         const maxError = Math.max(...results.map(r => r.error));

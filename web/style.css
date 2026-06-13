@@ -104,6 +104,9 @@
     --table-row-border: rgba(51, 65, 85, 1);
 }
 
+/* ===== Utility Classes ===== */
+.hidden { display: none !important; }
+
 /* ===== Background Dot Pattern & Spotlight ===== */
 .dot-pattern {
     position: fixed;
@@ -392,6 +395,32 @@ body {
     border-radius: 14px;
     font-size: 1rem;
 }
+
+/* Dynamic select (card mode, urn mode) */
+.dyn-select {
+    width: 250px;
+    height: 48px;
+    padding: 12px;
+    border-radius: 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    outline: none;
+    cursor: pointer;
+    font-size: 1rem;
+    color: var(--text-main);
+}
+
+/* Label color variants */
+.dyn-label--muted  { color: var(--text-muted); }
+.dyn-label--red    { color: #ef4444; }
+.dyn-label--blue   { color: #3b82f6; }
+.dyn-label--green  { color: #22c55e; }
+.dyn-label--amber  { color: #eab308; }
+.dyn-label--purple { color: #a855f7; }
+
+/* Input width variants */
+.dyn-input--w120 { width: 120px; }
+.dyn-input--w100 { width: 100px; }
 
 /* Main Content */
 main {
@@ -751,7 +780,8 @@ table code {
         min-width: 70px;
     }
     .dynamic-inputs input[type="number"],
-    .dynamic-inputs .dyn-input {
+    .dynamic-inputs .dyn-input,
+    .dynamic-inputs .dyn-select {
         width: 100%;
     }
     button.btn-primary {
@@ -1052,6 +1082,11 @@ table code {
     flex-shrink: 0;
 }
 
+.summary-icon--blue   { background: rgba(37, 99, 235, 0.1); }
+.summary-icon--green  { background: rgba(34, 197, 94, 0.1); }
+.summary-icon--purple { background: rgba(168, 85, 247, 0.1); }
+.summary-icon--amber  { background: rgba(245, 158, 11, 0.1); }
+
 .summary-info {
     display: flex;
     flex-direction: column;
@@ -1250,4 +1285,4 @@ table code {
     background: var(--surface);
     border-left: 1px solid var(--border);
     border-top: 1px solid var(--border);
-    transfor
+    transform: rotate(45deg);

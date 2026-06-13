@@ -75,7 +75,7 @@
                 <div id="dynamic-inputs" class="dynamic-inputs"></div>
                 <button id="runBtn" class="btn-primary"><i data-lucide="play"></i> Bắt đầu mô phỏng</button>
             </div>
-            <div class="progress-container" id="progressContainer" style="display: none;">
+            <div class="progress-container hidden" id="progressContainer">
                 <div class="progress-bar-bg">
                     <div class="progress-bar-fill" id="progressFill"></div>
                 </div>
@@ -95,41 +95,41 @@
                     <div class="empty-feature"><i data-lucide="brain"></i><span>AI phân tích</span></div>
                 </div>
             </section>
-            <section class="hero-section glass" id="heroSection" style="display: none;">
+            <section class="hero-section glass hidden" id="heroSection">
                 <h2 id="main-title">Mô phỏng Xúc xắc</h2>
                 <p id="main-description">Luật số lớn phát biểu rằng khi số lần thử nghiệm tăng lên, tần suất thực nghiệm sẽ tiến dần đến xác suất lý thuyết.</p>
             </section>
-            <div class="summary-grid" id="summaryGrid" style="display: none;">
+            <div class="summary-grid hidden" id="summaryGrid">
                 <div class="summary-card glass">
-                    <div class="summary-icon" style="background: rgba(37, 99, 235, 0.1);"><i data-lucide="bar-chart-3"></i></div>
+                    <div class="summary-icon summary-icon--blue"><i data-lucide="bar-chart-3"></i></div>
                     <div class="summary-info">
                         <span class="summary-value" id="summaryTrials">0</span>
                         <span class="summary-label">Tổng số thử</span>
                     </div>
                 </div>
                 <div class="summary-card glass">
-                    <div class="summary-icon" style="background: rgba(34, 197, 94, 0.1);"><i data-lucide="target"></i></div>
+                    <div class="summary-icon summary-icon--green"><i data-lucide="target"></i></div>
                     <div class="summary-info">
                         <span class="summary-value" id="summaryError">0%</span>
                         <span class="summary-label">Sai số TB</span>
                     </div>
                 </div>
                 <div class="summary-card glass">
-                    <div class="summary-icon" style="background: rgba(168, 85, 247, 0.1);"><i data-lucide="trending-up"></i></div>
+                    <div class="summary-icon summary-icon--purple"><i data-lucide="trending-up"></i></div>
                     <div class="summary-info">
                         <span class="summary-value" id="summaryConvergence">--</span>
                         <span class="summary-label">Hội tụ</span>
                     </div>
                 </div>
                 <div class="summary-card glass">
-                    <div class="summary-icon" style="background: rgba(245, 158, 11, 0.1);"><i data-lucide="zap"></i></div>
+                    <div class="summary-icon summary-icon--amber"><i data-lucide="zap"></i></div>
                     <div class="summary-info">
                         <span class="summary-value" id="summaryBest">--</span>
                         <span class="summary-label">Kết quả tốt nhất</span>
                     </div>
                 </div>
             </div>
-            <div class="skeleton-container" id="skeletonContainer" style="display: none;">
+            <div class="skeleton-container hidden" id="skeletonContainer">
                 <div class="stats-grid">
                     <section class="chart-card glass">
                         <div class="skeleton-title shimmer"></div>
@@ -145,7 +145,7 @@
                     <div class="skeleton-chart-short shimmer"></div>
                 </section>
             </div>
-            <div class="stats-grid" id="chartCard" style="display: none;">
+            <div class="stats-grid hidden" id="chartCard">
                 <section class="chart-card glass">
                     <div class="card-header">
                         <h3 class="card-title">Phân phối tần suất</h3>
@@ -172,19 +172,19 @@
                     </div>
                 </section>
             </div>
-            <section id="convergenceCard" class="chart-card chart-card--short glass" style="display: none;">
+            <section id="convergenceCard" class="chart-card chart-card--short glass hidden">
                 <h3 class="card-title">Đường hội tụ lũy tiến</h3>
                 <div class="chart-wrap">
                     <canvas id="convergenceChart"></canvas>
                 </div>
             </section>
-            <section id="aiSection" class="ai-panel glass" style="display: none;">
+            <section id="aiSection" class="ai-panel glass hidden">
                 <div class="ai-badge"><i data-lucide="brain"></i> NHẬN XÉT</div>
                 <div id="aiContent"></div>
             </section>
         </main>
     </div>
-    <div style="display: none;">
+    <div class="hidden">
         <canvas id="exportCanvas"></canvas>
     </div>
     <script type="module" src="js/main.js?v=3.5"></script>

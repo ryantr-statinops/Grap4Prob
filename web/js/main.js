@@ -64,9 +64,9 @@ document.addEventListener('DOMContentLoaded', () => {
         ui.updateHeader(type);
 
         // Clear & hide results
-        document.getElementById('aiSection').style.display = 'none';
-        document.getElementById('chartCard').style.display = 'none';
-        document.getElementById('convergenceCard').style.display = 'none';
+        document.getElementById('aiSection').classList.add('hidden');
+        document.getElementById('chartCard').classList.add('hidden');
+        document.getElementById('convergenceCard').classList.add('hidden');
         ui.hideSkeleton();
         ui.hideProgress();
         ui.elements.summaryGrid.style.display = 'none';
@@ -160,8 +160,8 @@ document.addEventListener('DOMContentLoaded', () => {
         ui.setLoading(true);
 
         // Show chart cards skeleton area
-        document.getElementById('chartCard').style.display = '';
-        document.getElementById('convergenceCard').style.display = '';
+        document.getElementById('chartCard').classList.remove('hidden');
+        document.getElementById('convergenceCard').classList.remove('hidden');
 
         try {
             const data = await engine.runProgressive(n, (current, total, counts, history) => {
